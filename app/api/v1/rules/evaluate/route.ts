@@ -3,16 +3,15 @@ import { sql } from '@/lib/db';
 import { getCorrelationId, withCorrelationId } from '@/app/api/_utils/correlation';
 
 export const dynamic = 'force-dynamic';
-// For demo/simplicity, using a fixed secret. In prod, use process.env.INTERNAL_CRON_SECRET
-const INTERNAL_SECRET = process.env.INTERNAL_CRON_SECRET || 'super-secret-cron-key';
 
 export async function POST(request: NextRequest) {
     const correlationId = getCorrelationId(request);
     const headers = withCorrelationId(correlationId, { 'Content-Type': 'application/json' });
 
-    // 1. Security Check
-    const authHeader = request.headers.get('Authorization');
-    if (authHeader !== `Bearer ${INTERNAL_SECRET}`) {
+    // 1. Security Check (using x-internal-cron-secret header for consistency)
+    const INTERNAL_SECRET = process.env.INTERNAL_CRON_SECRET || 'super-secret-cron-key';
+    const secret = request.headers.get('x-internal-cron-secret');
+    if (secret !== INTERNAL_SECRET) {
         return NextResponse.json(
             { error: { code: 'UNAUTHORIZED', message: 'Invalid cron secret' }, correlationId },
             { status: 401, headers }

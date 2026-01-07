@@ -12,6 +12,6 @@ jobs:
       - name: Call Evaluator Endpoint
         run: |
           curl -X POST "${{ secrets.CRON_BASE_URL }}/api/v1/rules/evaluate?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=${{ secrets.VERCEL_PROTECTION_BYPASS }}" \
-          -H "Authorization: Bearer ${{ secrets.INTERNAL_CRON_SECRET }}" \
+          -H "x-internal-cron-secret: ${{ secrets.INTERNAL_CRON_SECRET }}" \
           -H "Content-Type: application/json" \
           --fail --silent --show-error

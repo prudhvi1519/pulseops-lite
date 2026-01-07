@@ -14,9 +14,9 @@ export async function POST(request: NextRequest) {
     const correlationId = getCorrelationId(request);
     const headers = withCorrelationId(correlationId, { 'Content-Type': 'application/json' });
 
-    // 1. Security Check
-    const authHeader = request.headers.get('Authorization');
-    if (authHeader !== `Bearer ${INTERNAL_SECRET}`) {
+    // 1. Security Check (using x-internal-cron-secret header for consistency)
+    const secret = request.headers.get('x-internal-cron-secret');
+    if (secret !== INTERNAL_SECRET) {
         return NextResponse.json(
             { error: { code: 'UNAUTHORIZED', message: 'Invalid cron secret' }, correlationId },
             { status: 401, headers }

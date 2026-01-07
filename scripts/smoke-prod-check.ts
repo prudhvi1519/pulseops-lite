@@ -79,19 +79,17 @@ async function run() {
     } else {
         console.log("\n🔐 Authenticating with INTERNAL_CRON_SECRET...");
 
-        // logs/cleanup uses x-internal-cron-secret
+        // All cron endpoints now use x-internal-cron-secret header
         await triggerCron('Logs Cleanup', '/api/internal/logs/cleanup', {
             'x-internal-cron-secret': INTERNAL_CRON_SECRET
         });
 
-        // notifications/process uses Bearer
         await triggerCron('Process Notifications', '/api/v1/notifications/process', {
-            'Authorization': `Bearer ${INTERNAL_CRON_SECRET}`
+            'x-internal-cron-secret': INTERNAL_CRON_SECRET
         });
 
-        // rules/evaluate uses Bearer
         await triggerCron('Evaluate Rules', '/api/v1/rules/evaluate', {
-            'Authorization': `Bearer ${INTERNAL_CRON_SECRET}`
+            'x-internal-cron-secret': INTERNAL_CRON_SECRET
         });
     }
 
