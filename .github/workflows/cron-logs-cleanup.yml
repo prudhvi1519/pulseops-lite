@@ -11,6 +11,6 @@ jobs:
     steps:
       - name: Trigger Cleanup Endpoint
         run: |
-          curl -X POST "${{ secrets.CRON_BASE_URL }}/api/internal/logs/cleanup" \
+          curl -X POST "${{ secrets.CRON_BASE_URL }}/api/internal/logs/cleanup?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=${{ secrets.VERCEL_PROTECTION_BYPASS }}" \
             -H "x-internal-cron-secret: ${{ secrets.INTERNAL_CRON_SECRET }}" \
             --fail --silent --show-error

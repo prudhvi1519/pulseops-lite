@@ -1,7 +1,16 @@
-import { headers } from "next/headers";
+// Smoke Production Check Script
 
 const BASE_URL = process.env.BASE_URL || process.argv[2];
 const INTERNAL_CRON_SECRET = process.env.INTERNAL_CRON_SECRET;
+const VERCEL_PROTECTION_BYPASS = process.env.VERCEL_PROTECTION_BYPASS;
+
+function withVercelBypass(url: string): string {
+    if (!VERCEL_PROTECTION_BYPASS) return url;
+    const u = new URL(url);
+    u.searchParams.set("x-vercel-set-bypass-cookie", "true");
+    u.searchParams.set("x-vercel-protection-bypass", VERCEL_PROTECTION_BYPASS);
+    return u.toString();
+}
 
 if (!BASE_URL) {
     console.error("Error: BASE_URL env var or argument is required");
@@ -15,7 +24,7 @@ const baseUrl = BASE_URL.replace(/\/$/, "");
 async function checkHealth() {
     process.stdout.write(`Checking GET ${baseUrl}/api/health ... `);
     try {
-        const res = await fetch(`${baseUrl}/api/health`);
+        const res = await fetch(withVercelBypass(`${baseUrl}/api/health`));
         if (res.ok) {
             const json = await res.json();
             if (json.data?.ok) {
@@ -36,7 +45,7 @@ async function checkHealth() {
 async function triggerCron(name: string, path: string, authHeader: object) {
     process.stdout.write(`Triggering ${name} (${path}) ... `);
     try {
-        const res = await fetch(`${baseUrl}${path}`, {
+        const res = await fetch(withVercelBypass(`${baseUrl}${path}`), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
