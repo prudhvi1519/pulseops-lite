@@ -1,0 +1,16 @@
+name: Cron - Process Notifications
+
+on:
+  schedule:
+    - cron: '*/5 * * * *' # Every 5 minutes
+  workflow_dispatch: # Manual trigger
+
+jobs:
+  process-notifications:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Processor Endpoint
+        run: |
+          curl -X POST ${{ secrets.CRON_BASE_URL }}/api/v1/notifications/process \
+          -H "Authorization: Bearer ${{ secrets.INTERNAL_CRON_SECRET }}" \
+          -H "Content-Type: application/json"

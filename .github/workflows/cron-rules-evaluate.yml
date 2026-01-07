@@ -1,0 +1,17 @@
+name: Cron - Evaluate Rules
+
+on:
+  schedule:
+    - cron: '*/5 * * * *' # Every 5 minutes (GitHub Actions minimum)
+  workflow_dispatch: # Manual trigger
+
+jobs:
+  evaluate-rules:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Evaluator Endpoint
+        run: |
+          curl -X POST ${{ secrets.CRON_BASE_URL }}/api/v1/rules/evaluate \
+          -H "Authorization: Bearer ${{ secrets.INTERNAL_CRON_SECRET }}" \
+          -H "Content-Type: application/json" \
+          --fail --silent --show-error

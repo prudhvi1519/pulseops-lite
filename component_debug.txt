@@ -1,0 +1,2 @@
+PROPS DEBUG: initialChannels=false (len undefined), initialJobs=false
+PROPS DEBUG: initialChannels=true (len 1), initialJobs=true

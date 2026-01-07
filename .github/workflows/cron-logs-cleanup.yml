@@ -1,0 +1,16 @@
+name: Logs Retention Cleanup
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Daily at midnight UTC
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Cleanup Endpoint
+        run: |
+          curl -X POST "${{ secrets.CRON_BASE_URL }}/api/internal/logs/cleanup" \
+            -H "x-internal-cron-secret: ${{ secrets.INTERNAL_CRON_SECRET }}" \
+            --fail --silent --show-error
