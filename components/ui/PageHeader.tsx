@@ -8,42 +8,15 @@ interface PageHeaderProps {
 
 export function PageHeader({ title, description, children }: PageHeaderProps) {
     return (
-        <div
-            style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 'var(--spacing-xs)',
-                marginBottom: 'var(--spacing-lg)',
-            }}
-        >
-            <div
-                style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    gap: 'var(--spacing-md)',
-                }}
-            >
-                <h1
-                    style={{
-                        fontSize: 'var(--text-2xl)',
-                        fontWeight: 600,
-                        color: 'var(--color-text-primary)',
-                        margin: 0,
-                    }}
-                >
+        <div className="mb-8 flex flex-col gap-1">
+            <div className="flex items-center justify-between gap-4">
+                <h1 className="text-2xl font-semibold tracking-tight text-foreground">
                     {title}
                 </h1>
                 {children}
             </div>
             {description && (
-                <p
-                    style={{
-                        fontSize: 'var(--text-sm)',
-                        color: 'var(--color-text-secondary)',
-                        margin: 0,
-                    }}
-                >
+                <p className="text-sm text-muted-foreground">
                     {description}
                 </p>
             )}

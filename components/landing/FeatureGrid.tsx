@@ -83,7 +83,7 @@ export function FeatureGrid() {
                     }}
                 >
                     {FEATURES.map((feature) => (
-                        <Card key={feature.title} padding="lg">
+                        <Card key={feature.title} padding="lg" hover>
                             <div style={{ marginBottom: 'var(--spacing-sm)', fontSize: '2rem' }}>{feature.icon}</div>
                             <h3
                                 style={{

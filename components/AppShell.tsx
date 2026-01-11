@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 interface AppShellProps {
     children: React.ReactNode;
@@ -8,83 +9,28 @@ export function AppShell({ children }: AppShellProps) {
     const appName = process.env.NEXT_PUBLIC_APP_NAME || 'PulseOps Lite';
 
     return (
-        <div
-            style={{
-                minHeight: '100vh',
-                display: 'flex',
-                flexDirection: 'column',
-            }}
-        >
+        <div className="flex min-h-screen flex-col bg-background">
             {/* Header */}
-            <header
-                style={{
-                    backgroundColor: 'var(--color-surface)',
-                    borderBottom: '1px solid var(--color-border)',
-                    padding: 'var(--spacing-md) var(--spacing-lg)',
-                }}
-            >
-                <div
-                    style={{
-                        maxWidth: '72rem',
-                        margin: '0 auto',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                    }}
-                >
-                    <span
-                        style={{
-                            fontSize: 'var(--text-lg)',
-                            fontWeight: 600,
-                            color: 'var(--color-text-primary)',
-                        }}
-                    >
+            <header className="border-b bg-card">
+                <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+                    <Link href="/dashboard" className="text-lg font-semibold text-foreground hover:opacity-80 transition-opacity">
                         {appName}
-                    </span>
+                    </Link>
                 </div>
             </header>
 
             {/* Main content */}
-            <main
-                style={{
-                    flex: 1,
-                    padding: 'var(--spacing-lg)',
-                }}
-            >
-                <div
-                    style={{
-                        maxWidth: '72rem',
-                        margin: '0 auto',
-                    }}
-                >
+            <main className="flex-1 py-10">
+                <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     {children}
                 </div>
             </main>
 
             {/* Footer */}
-            <footer
-                style={{
-                    backgroundColor: 'var(--color-surface)',
-                    borderTop: '1px solid var(--color-border)',
-                    padding: 'var(--spacing-md) var(--spacing-lg)',
-                }}
-            >
-                <div
-                    style={{
-                        maxWidth: '72rem',
-                        margin: '0 auto',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                >
-                    <span
-                        style={{
-                            fontSize: 'var(--text-sm)',
-                            color: 'var(--color-text-muted)',
-                        }}
-                    >
-                        {appName}
+            <footer className="border-t bg-card py-6">
+                <div className="container mx-auto flex max-w-7xl items-center justify-center px-4 sm:px-6 lg:px-8">
+                    <span className="text-sm text-muted-foreground">
+                        {appName} &copy; {new Date().getFullYear()}
                     </span>
                 </div>
             </footer>

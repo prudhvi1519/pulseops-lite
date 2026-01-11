@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
 const TABS = [
     { id: 'overview', label: 'Overview' },
@@ -66,6 +66,22 @@ const TAB_CONTENT: Record<string, { intro: string; items: string[] }> = {
 
 export function PRDShowroom() {
     const [activeTab, setActiveTab] = useState('overview');
+    const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+    const handleKeyDown = (e: React.KeyboardEvent, index: number) => {
+        let nextIndex = index;
+        if (e.key === 'ArrowRight') {
+            nextIndex = (index + 1) % TABS.length;
+        } else if (e.key === 'ArrowLeft') {
+            nextIndex = (index - 1 + TABS.length) % TABS.length;
+        }
+
+        if (nextIndex !== index) {
+            e.preventDefault();
+            setActiveTab(TABS[nextIndex].id);
+            tabRefs.current[nextIndex]?.focus();
+        }
+    };
 
     const content = TAB_CONTENT[activeTab];
 
@@ -89,6 +105,8 @@ export function PRDShowroom() {
 
                 {/* Tabs */}
                 <div
+                    role="tablist"
+                    aria-label="PRD sections"
                     style={{
                         display: 'flex',
                         gap: 'var(--spacing-xs)',
@@ -99,21 +117,18 @@ export function PRDShowroom() {
                         flexWrap: 'wrap',
                     }}
                 >
-                    {TABS.map((tab) => (
+                    {TABS.map((tab, i) => (
                         <button
                             key={tab.id}
+                            ref={(el) => { tabRefs.current[i] = el }}
+                            role="tab"
+                            id={`tab-${tab.id}`}
+                            aria-selected={activeTab === tab.id}
+                            aria-controls={`panel-${tab.id}`}
+                            tabIndex={activeTab === tab.id ? 0 : -1}
                             onClick={() => setActiveTab(tab.id)}
-                            style={{
-                                padding: 'var(--spacing-sm) var(--spacing-md)',
-                                fontSize: 'var(--text-sm)',
-                                fontWeight: 500,
-                                border: 'none',
-                                borderRadius: 'var(--radius-md)',
-                                cursor: 'pointer',
-                                transition: 'all 150ms',
-                                backgroundColor: activeTab === tab.id ? '#6366f1' : 'var(--color-surface)',
-                                color: activeTab === tab.id ? '#fff' : 'var(--color-text-secondary)',
-                            }}
+                            onKeyDown={(e) => handleKeyDown(e, i)}
+                            className="tab-btn"
                         >
                             {tab.label}
                         </button>
@@ -122,11 +137,16 @@ export function PRDShowroom() {
 
                 {/* Content */}
                 <div
+                    role="tabpanel"
+                    id={`panel-${activeTab}`}
+                    aria-labelledby={`tab-${activeTab}`}
+                    tabIndex={0}
                     style={{
                         backgroundColor: 'var(--color-surface)',
                         border: '1px solid var(--color-border)',
                         borderRadius: 'var(--radius-lg)',
                         padding: 'var(--spacing-xl)',
+                        outline: 'none',
                     }}
                 >
                     <p style={{ fontSize: 'var(--text-base)', color: 'var(--color-text-secondary)', marginBottom: 'var(--spacing-lg)' }}>
@@ -161,12 +181,15 @@ export function PRDShowroom() {
                         href="https://github.com/prudhvi1519/pulseops-lite"
                         target="_blank"
                         rel="noopener noreferrer"
+                        className="hover-scale"
                         style={{
                             fontSize: 'var(--text-sm)',
                             color: '#6366f1',
                             display: 'flex',
                             alignItems: 'center',
                             gap: 'var(--spacing-xs)',
+                            padding: 'var(--spacing-sm) var(--spacing-md)',
+                            borderRadius: 'var(--radius-md)',
                         }}
                     >
                         View on GitHub ↗

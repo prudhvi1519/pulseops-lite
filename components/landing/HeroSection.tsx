@@ -66,6 +66,7 @@ export function HeroSection() {
                     <div style={{ display: 'flex', gap: 'var(--spacing-md)', flexWrap: 'wrap' }}>
                         <Link
                             href="/login"
+                            className="hover-glow"
                             style={{
                                 display: 'inline-flex',
                                 alignItems: 'center',
@@ -76,13 +77,13 @@ export function HeroSection() {
                                 borderRadius: 'var(--radius-md)',
                                 fontWeight: 500,
                                 fontSize: 'var(--text-base)',
-                                transition: 'transform 150ms, box-shadow 150ms',
                             }}
                         >
                             Open App →
                         </Link>
                         <a
                             href="#prd-showroom"
+                            className="hover-border"
                             style={{
                                 display: 'inline-flex',
                                 alignItems: 'center',
@@ -105,6 +106,7 @@ export function HeroSection() {
                         {TRUST_BADGES.map((badge) => (
                             <span
                                 key={badge.label}
+                                className="hover-scale"
                                 style={{
                                     display: 'inline-flex',
                                     alignItems: 'center',
@@ -115,6 +117,7 @@ export function HeroSection() {
                                     padding: '4px 10px',
                                     borderRadius: '9999px',
                                     border: '1px solid var(--color-border)',
+                                    cursor: 'default',
                                 }}
                             >
                                 <span>{badge.icon}</span>

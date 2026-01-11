@@ -11,7 +11,7 @@ export default function LandingPage() {
     return (
         <>
             <LandingNavbar />
-            <main>
+            <main id="main-content" tabIndex={-1} style={{ outline: 'none' }}>
                 <HeroSection />
                 <CredibilityStrip />
                 <FeatureGrid />

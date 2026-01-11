@@ -6,6 +6,8 @@ import { PageHeader } from '@/components/ui/PageHeader';
 
 export const dynamic = 'force-dynamic';
 
+import { AppShell } from '@/components/AppShell';
+
 export default async function IncidentsPage() {
     // 1. Auth & Scoping
     const { orgId } = await requireOrgRole('viewer');
@@ -44,12 +46,12 @@ export default async function IncidentsPage() {
     const services = Array.from(servicesMap.values());
 
     return (
-        <div>
+        <AppShell>
             <PageHeader
                 title="Incidents"
                 description="Monitor and manage system outages and alerts."
             />
             <IncidentsClient services={services} />
-        </div>
+        </AppShell>
     );
 }

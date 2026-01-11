@@ -5,6 +5,8 @@ import { LogsExplorerClient } from '@/components/logs/LogsExplorerClient';
 
 export const dynamic = 'force-dynamic';
 
+import { AppShell } from '@/components/AppShell';
+
 export default async function LogsPage() {
     // 1. Auth check
     const { orgId } = await requireOrgRole('viewer');
@@ -35,12 +37,12 @@ export default async function LogsPage() {
     }));
 
     return (
-        <div>
+        <AppShell>
             <PageHeader
                 title="Logs Explorer"
                 description="Search and analyze application logs."
             />
             <LogsExplorerClient services={services} />
-        </div>
+        </AppShell>
     );
 }
