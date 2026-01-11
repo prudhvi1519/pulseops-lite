@@ -1,0 +1,9 @@
+// Landing page components barrel export
+export { LandingNavbar } from './LandingNavbar';
+export { HeroSection } from './HeroSection';
+export { CredibilityStrip } from './CredibilityStrip';
+export { FeatureGrid } from './FeatureGrid';
+export { PRDShowroom } from './PRDShowroom';
+export { ProofPanel } from './ProofPanel';
+export { TechStackSection } from './TechStackSection';
+export { LandingFooter } from './LandingFooter';

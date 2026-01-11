@@ -1,27 +1,44 @@
 import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import HomePage from '@/app/page';
+import { render } from '@testing-library/react';
+import LandingPage from '@/app/page';
 
-describe('Home Page', () => {
-    it('displays "System Status: OK (mock)"', () => {
-        render(<HomePage />);
+describe('Landing Page', () => {
+    it('renders the landing page with hero content', () => {
+        const { container } = render(<LandingPage />);
 
-        expect(screen.getByText('System Status: OK (mock)')).toBeInTheDocument();
+        // Hero headline
+        expect(container.textContent).toContain('Ship with confidence');
+        expect(container.textContent).toContain('Debug with context');
     });
 
-    it('displays version string', () => {
-        const { container } = render(<HomePage />);
+    it('displays navigation and CTAs', () => {
+        const { container } = render(<LandingPage />);
 
-        // In test environment, VERCEL_GIT_COMMIT_SHA is not set, so it should show 'dev'
-        const codeElement = container.querySelector('code');
-        expect(codeElement).toBeInTheDocument();
-        expect(codeElement?.textContent).toBe('dev');
+        // Navbar
+        expect(container.textContent).toContain('PulseOps');
+        expect(container.textContent).toContain('Get Started');
     });
 
-    it('displays operational badge', () => {
-        const { container } = render(<HomePage />);
+    it('displays credibility strip with metrics', () => {
+        const { container } = render(<LandingPage />);
 
-        // Find text content in the rendered output
-        expect(container.textContent).toContain('Operational');
+        expect(container.textContent).toContain('13 SQL Migrations');
+        expect(container.textContent).toContain('37 API Routes');
+        expect(container.textContent).toContain('16 DB Tables');
+    });
+
+    it('displays feature section', () => {
+        const { container } = render(<LandingPage />);
+
+        expect(container.textContent).toContain("What's inside");
+        expect(container.textContent).toContain('Organizations & Teams');
+        expect(container.textContent).toContain('RBAC Built In');
+    });
+
+    it('displays PRD showroom section', () => {
+        const { container } = render(<LandingPage />);
+
+        expect(container.textContent).toContain('Under the Hood');
+        expect(container.textContent).toContain('Overview');
     });
 });
