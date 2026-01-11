@@ -5,23 +5,30 @@ import { randomUUID } from 'crypto';
 
 // Load env first
 const envPath = path.resolve(process.cwd(), '.env.local');
+console.log(`Debug: Looking for env at ${envPath}`);
 if (fs.existsSync(envPath)) {
     console.log('📄 Loading .env.local...');
     const content = fs.readFileSync(envPath, 'utf-8');
-    content.split('\n').forEach(line => {
-        // Robust regex for .env parsing
-        const match = line.match(/^\s*([\w.-]+)\s*=\s*(.*)?$/);
-        if (match && !line.trim().startsWith('#')) {
-            const key = match[1];
-            let value = match[2] || '';
-            // Remove surrounding quotes if present
-            value = value.replace(/^['"](.*)['"]$/, '$1');
-            process.env[key] = value.trim();
+    // Handle CRLF or LF
+    const lines = content.split(/\r?\n/);
+    lines.forEach(line => {
+        // Basic Key=Value parser (ignore comments)
+        if (!line || line.trim().startsWith('#')) return;
+
+        const eqIdx = line.indexOf('=');
+        if (eqIdx > 0) {
+            const key = line.substring(0, eqIdx).trim();
+            let value = line.substring(eqIdx + 1).trim();
+            // Remove quotes
+            if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+                value = value.slice(1, -1);
+            }
+            process.env[key] = value;
         }
     });
-    console.log('Keys loaded:', Object.keys(process.env).filter(k => k.startsWith('API_') || k.includes('SECRET')));
+    console.log('Keys loaded:', Object.keys(process.env).filter(k => k === 'API_KEY_SALT' || k.includes('SECRET')));
 } else {
-    console.warn('⚠️ .env.local not found!');
+    console.warn('⚠️ .env.local not found at ' + envPath);
 }
 
 async function main() {
