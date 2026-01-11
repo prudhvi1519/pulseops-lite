@@ -14,7 +14,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             <button
                 ref={ref}
                 className={`inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50
-          ${variant === 'default' ? 'bg-primary text-primary-foreground shadow hover:bg-primary/90' : ''}
+          ${variant === 'default' ? 'bg-primary text-primary-foreground shadow hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5 transition-all duration-200' : ''}
           ${variant === 'destructive' ? 'bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90' : ''}
           ${variant === 'outline' ? 'border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground' : ''}
           ${variant === 'secondary' ? 'bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80' : ''}

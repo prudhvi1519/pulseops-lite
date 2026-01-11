@@ -1,14 +1,17 @@
+@import "tailwindcss";
+
 :root {
   /* Colors - Light first design */
+  --color-primary: #6366f1;
   --color-background: #fafafa;
   --color-surface: #ffffff;
   --color-border: #e5e5e5;
   --color-border-subtle: #f0f0f0;
-  
+
   --color-text-primary: #171717;
   --color-text-secondary: #525252;
   --color-text-muted: #a3a3a3;
-  
+
   --color-success: #22c55e;
   --color-success-bg: #f0fdf4;
   --color-warning: #f59e0b;
@@ -35,7 +38,7 @@
   /* Typography */
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
-  
+
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
   --text-base: 1rem;
@@ -47,12 +50,26 @@
   /* Shadows - minimal for light-first design */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+
+  /* Navbar height for scroll offset */
+  --navbar-height: 64px;
 }
 
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+}
+
+/* Smooth scrolling - respects reduced motion */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 html,
@@ -74,4 +91,79 @@ code,
 pre,
 .mono {
   font-family: var(--font-mono);
+}
+
+/* Scroll margin for sticky navbar offset */
+section[id] {
+  scroll-margin-top: var(--navbar-height);
+}
+
+/* --- Visual Polish Utilities --- */
+
+/* Card hover lift */
+.hover-lift {
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Badge/Button hover scale */
+.hover-scale {
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.hover-scale:hover {
+  transform: scale(1.02);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Primary CTA hover glow */
+.hover-glow {
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.hover-glow:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+/* Secondary CTA hover */
+.hover-border {
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+.hover-border:hover {
+  background-color: var(--color-background);
+  border-color: var(--color-text-muted);
+}
+
+/* Tab Button Styles */
+.tab-btn {
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 150ms;
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+}
+
+.tab-btn:hover:not([aria-selected="true"]) {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+}
+
+.tab-btn[aria-selected="true"] {
+  background-color: #6366f1;
+  color: #fff;
+}
+
+.tab-btn:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
 }

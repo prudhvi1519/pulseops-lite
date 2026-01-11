@@ -6,29 +6,25 @@ interface CardProps {
     padding?: 'sm' | 'md' | 'lg';
     style?: React.CSSProperties;
     onClick?: () => void;
+    hover?: boolean;
 }
 
-const paddingMap = {
-    sm: 'var(--spacing-sm)',
-    md: 'var(--spacing-md)',
-    lg: 'var(--spacing-lg)',
-};
 
-export function Card({ children, className = '', padding = 'md', style, onClick }: CardProps) {
+export function Card({ children, className = '', padding = 'md', style, onClick, hover }: CardProps) {
+    const paddingClass = {
+        sm: 'p-sm',
+        md: 'p-md',
+        lg: 'p-lg',
+    }[padding];
+
     return (
         <div
-            className={className}
+            className={`bg-card text-card-foreground border border-border/50 shadow-sm rounded-xl ${paddingClass} ${hover ? 'hover-lift' : ''} ${onClick ? 'cursor-pointer' : ''} ${className}`}
             onClick={onClick}
-            style={{
-                backgroundColor: 'var(--color-surface)',
-                border: '1px solid var(--color-border)',
-                borderRadius: 'var(--radius-lg)',
-                padding: paddingMap[padding],
-                cursor: onClick ? 'pointer' : undefined,
-                ...style,
-            }}
+            style={style}
         >
             {children}
         </div>
     );
 }
+

@@ -2,8 +2,13 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { AuthLayout } from '@/components/auth/AuthLayout';
 import { Card } from '@/components/ui/Card';
-import { PageHeader } from '@/components/ui/PageHeader';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Alert } from '@/components/ui/alert';
+import Link from 'next/link';
 
 export default function SignupPage() {
     const router = useRouter();
@@ -41,180 +46,84 @@ export default function SignupPage() {
     };
 
     return (
-        <div
-            style={{
-                minHeight: '100vh',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: 'var(--color-background)',
-                padding: 'var(--spacing-lg)',
-            }}
-        >
-            <div style={{ width: '100%', maxWidth: '400px' }}>
-                <PageHeader
-                    title="Create Account"
-                    description="Sign up to get started with PulseOps Lite"
-                />
-
-                <Card padding="lg">
-                    <form onSubmit={handleSubmit}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
-                            {error && (
-                                <div
-                                    style={{
-                                        padding: 'var(--spacing-sm) var(--spacing-md)',
-                                        backgroundColor: 'var(--color-error-bg)',
-                                        color: 'var(--color-error)',
-                                        borderRadius: 'var(--radius-md)',
-                                        fontSize: 'var(--text-sm)',
-                                    }}
-                                >
-                                    {error}
-                                </div>
-                            )}
-
-                            <div>
-                                <label
-                                    htmlFor="name"
-                                    style={{
-                                        display: 'block',
-                                        fontSize: 'var(--text-sm)',
-                                        fontWeight: 500,
-                                        color: 'var(--color-text-primary)',
-                                        marginBottom: 'var(--spacing-xs)',
-                                    }}
-                                >
-                                    Name (optional)
-                                </label>
-                                <input
-                                    id="name"
-                                    type="text"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    style={{
-                                        width: '100%',
-                                        padding: 'var(--spacing-sm) var(--spacing-md)',
-                                        border: '1px solid var(--color-border)',
-                                        borderRadius: 'var(--radius-md)',
-                                        fontSize: 'var(--text-base)',
-                                        backgroundColor: 'var(--color-surface)',
-                                    }}
-                                />
-                            </div>
-
-                            <div>
-                                <label
-                                    htmlFor="email"
-                                    style={{
-                                        display: 'block',
-                                        fontSize: 'var(--text-sm)',
-                                        fontWeight: 500,
-                                        color: 'var(--color-text-primary)',
-                                        marginBottom: 'var(--spacing-xs)',
-                                    }}
-                                >
-                                    Email
-                                </label>
-                                <input
-                                    id="email"
-                                    type="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    required
-                                    style={{
-                                        width: '100%',
-                                        padding: 'var(--spacing-sm) var(--spacing-md)',
-                                        border: '1px solid var(--color-border)',
-                                        borderRadius: 'var(--radius-md)',
-                                        fontSize: 'var(--text-base)',
-                                        backgroundColor: 'var(--color-surface)',
-                                    }}
-                                />
-                            </div>
-
-                            <div>
-                                <label
-                                    htmlFor="password"
-                                    style={{
-                                        display: 'block',
-                                        fontSize: 'var(--text-sm)',
-                                        fontWeight: 500,
-                                        color: 'var(--color-text-primary)',
-                                        marginBottom: 'var(--spacing-xs)',
-                                    }}
-                                >
-                                    Password
-                                </label>
-                                <input
-                                    id="password"
-                                    type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    required
-                                    minLength={8}
-                                    style={{
-                                        width: '100%',
-                                        padding: 'var(--spacing-sm) var(--spacing-md)',
-                                        border: '1px solid var(--color-border)',
-                                        borderRadius: 'var(--radius-md)',
-                                        fontSize: 'var(--text-base)',
-                                        backgroundColor: 'var(--color-surface)',
-                                    }}
-                                />
-                                <p
-                                    style={{
-                                        fontSize: 'var(--text-xs)',
-                                        color: 'var(--color-text-muted)',
-                                        marginTop: 'var(--spacing-xs)',
-                                    }}
-                                >
-                                    At least 8 characters
-                                </p>
-                            </div>
-
-                            <button
-                                type="submit"
-                                disabled={loading}
-                                style={{
-                                    width: '100%',
-                                    padding: 'var(--spacing-sm) var(--spacing-md)',
-                                    backgroundColor: 'var(--color-text-primary)',
-                                    color: 'var(--color-surface)',
-                                    border: 'none',
-                                    borderRadius: 'var(--radius-md)',
-                                    fontSize: 'var(--text-base)',
-                                    fontWeight: 500,
-                                    cursor: loading ? 'not-allowed' : 'pointer',
-                                    opacity: loading ? 0.7 : 1,
-                                }}
-                            >
-                                {loading ? 'Creating account...' : 'Create Account'}
-                            </button>
-                        </div>
-                    </form>
-
-                    <p
-                        style={{
-                            marginTop: 'var(--spacing-lg)',
-                            textAlign: 'center',
-                            fontSize: 'var(--text-sm)',
-                            color: 'var(--color-text-secondary)',
-                        }}
-                    >
-                        Already have an account?{' '}
-                        <a
-                            href="/login"
-                            style={{
-                                color: 'var(--color-info)',
-                                textDecoration: 'underline',
-                            }}
-                        >
-                            Sign in
-                        </a>
+        <AuthLayout>
+            <Card padding="lg">
+                <div className="mb-6 flex flex-col space-y-2 text-center">
+                    <h1 className="text-2xl font-semibold tracking-tight">Create an account</h1>
+                    <p className="text-sm text-muted-foreground">
+                        Enter your email below to create your account
                     </p>
-                </Card>
-            </div>
-        </div>
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    {error && (
+                        <Alert variant="destructive" className="py-2 text-sm bg-destructive/10 border-destructive/20 text-destructive">
+                            {error}
+                        </Alert>
+                    )}
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="name">Name (optional)</Label>
+                        <Input
+                            id="name"
+                            type="text"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            placeholder="Jane Doe"
+                            className="bg-background"
+                        />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="email">Email</Label>
+                        <Input
+                            id="email"
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                            placeholder="name@example.com"
+                            className="bg-background"
+                        />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="password">Password</Label>
+                        <Input
+                            id="password"
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                            minLength={8}
+                            className="bg-background"
+                        />
+                        <p className="text-xs text-muted-foreground">
+                            At least 8 characters
+                        </p>
+                    </div>
+
+                    <Button type="submit" disabled={loading} className="w-full">
+                        {loading ? 'Creating account...' : 'Create Account'}
+                    </Button>
+                </form>
+
+                <div className="relative mt-6">
+                    <div className="absolute inset-0 flex items-center">
+                        <span className="w-full border-t border-border/50" />
+                    </div>
+                </div>
+
+                <div className="mt-4 text-center text-sm text-muted-foreground">
+                    Already have an account?{' '}
+                    <Link
+                        href="/login"
+                        className="font-medium text-primary hover:underline hover:text-primary/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
+                    >
+                        Sign in
+                    </Link>
+                </div>
+            </Card>
+        </AuthLayout>
     );
 }
