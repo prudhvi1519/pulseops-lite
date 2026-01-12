@@ -10,6 +10,7 @@ import { EmptyState } from '@/components/ui/EmptyState';
 import { SkeletonLoader } from '@/components/ui/SkeletonLoader';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { LinkButton } from '@/components/ui/LinkButton';
 
 interface Service {
     id: string;

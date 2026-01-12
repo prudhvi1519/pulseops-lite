@@ -3,7 +3,7 @@ import React from 'react';
 interface CardProps {
     children: React.ReactNode;
     className?: string;
-    padding?: 'sm' | 'md' | 'lg';
+    padding?: 'none' | 'sm' | 'md' | 'lg';
     style?: React.CSSProperties;
     onClick?: () => void;
     hover?: boolean;
@@ -12,6 +12,7 @@ interface CardProps {
 
 export function Card({ children, className = '', padding = 'md', style, onClick, hover }: CardProps) {
     const paddingClass = {
+        none: 'p-0',
         sm: 'p-sm',
         md: 'p-md',
         lg: 'p-lg',

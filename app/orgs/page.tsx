@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { AppShell } from '@/components/AppShell';
+import { LinkButton } from '@/components/ui/LinkButton';
 import { Card } from '@/components/ui/Card';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Badge } from '@/components/ui/Badge';
@@ -116,9 +117,9 @@ export default function OrgsPage() {
                     {orgs.map((org) => (
                         <div
                             key={org.orgId}
-                            className={`flex items-center justify-between rounded-lg border p-4 transition-colors ${org.orgId === activeOrgId
-                                ? 'border-success/50 bg-success/5'
-                                : 'border-transparent bg-muted/50 hover:bg-muted'
+                            className={`flex items-center justify-between rounded-lg border px-4 py-3 transition-colors ${org.orgId === activeOrgId
+                                ? 'border-success/40 bg-success/5'
+                                : 'border-border/60 bg-card hover:bg-muted/50'
                                 }`}
                         >
                             <div className="flex items-center gap-3">
@@ -156,12 +157,9 @@ export default function OrgsPage() {
             </Card>
 
             <div className="mt-8">
-                <Link
-                    href="/dashboard"
-                    className="inline-flex h-9 items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring pl-0 hover:bg-transparent hover:text-primary"
-                >
+                <LinkButton href="/dashboard" variant="ghost" className="pl-0">
                     ← Back to Dashboard
-                </Link>
+                </LinkButton>
             </div>
         </AppShell>
     );

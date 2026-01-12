@@ -3,9 +3,10 @@ import Link from 'next/link';
 
 interface AppShellProps {
     children: React.ReactNode;
+    headerActions?: React.ReactNode;
 }
 
-export function AppShell({ children }: AppShellProps) {
+export function AppShell({ children, headerActions }: AppShellProps) {
     const appName = process.env.NEXT_PUBLIC_APP_NAME || 'PulseOps Lite';
 
     return (
@@ -16,6 +17,11 @@ export function AppShell({ children }: AppShellProps) {
                     <Link href="/dashboard" className="text-lg font-semibold text-foreground hover:opacity-80 transition-opacity">
                         {appName}
                     </Link>
+                    {headerActions && (
+                        <div className="flex items-center gap-2">
+                            {headerActions}
+                        </div>
+                    )}
                 </div>
             </header>
 
