@@ -87,11 +87,13 @@ export default function DashboardPage() {
         return null;
     }
 
+    const { user } = data;
+
     return (
         <AppShell>
             <PageHeader
                 title="Dashboard"
-                description={`Welcome back${data.user.name ? `, ${data.user.name}` : ''}`}
+                description={`Welcome back${user?.name ? `, ${user.name}` : ''}`}
             >
                 <Button variant="outline" onClick={handleLogout}>
                     Sign Out
