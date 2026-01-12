@@ -226,11 +226,12 @@ export default function ServicesPage() {
             )}
 
             <div className="mt-8">
-                <Button variant="ghost" asChild className="pl-0 hover:bg-transparent hover:text-primary">
-                    <Link href="/dashboard">
-                        ← Back to Dashboard
-                    </Link>
-                </Button>
+                <Link
+                    href="/dashboard"
+                    className="inline-flex h-9 items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring pl-0 hover:bg-transparent hover:text-primary"
+                >
+                    ← Back to Dashboard
+                </Link>
             </div>
         </AppShell>
     );
