@@ -100,65 +100,67 @@ export default function OrgsPage() {
 
     return (
         <AppShell>
-            <PageHeader
-                title="Organizations"
-                description="Switch between your organizations"
-            />
+            <div className="space-y-6">
+                <PageHeader
+                    title="Organizations"
+                    description="Switch between your organizations"
+                />
 
-            {error && (
-                <div className="mb-4 rounded-md bg-destructive/15 p-4 text-sm text-destructive">
-                    {error}
-                </div>
-            )}
+                {error && (
+                    <div className="rounded-md bg-destructive/15 p-4 text-sm text-destructive">
+                        {error}
+                    </div>
+                )}
 
-            <Card padding="lg">
-                <div className="flex flex-col gap-2">
-                    {orgs.map((org) => (
-                        <div
-                            key={org.orgId}
-                            className={`flex items-center justify-between rounded-lg border px-4 py-3 transition-colors ${org.orgId === activeOrgId
-                                ? 'border-success/40 bg-success/5'
-                                : 'border-border/60 bg-card hover:bg-muted/50'
-                                }`}
-                        >
-                            <div className="flex items-center gap-3">
-                                <span className="font-medium text-foreground">
-                                    {org.orgName}
-                                </span>
-                                <Badge
-                                    variant={
-                                        org.role === 'admin'
-                                            ? 'info'
-                                            : org.role === 'developer'
-                                                ? 'warning'
-                                                : 'neutral'
-                                    }
-                                >
-                                    {org.role}
-                                </Badge>
+                <Card padding="lg">
+                    <div className="flex flex-col gap-2">
+                        {orgs.map((org) => (
+                            <div
+                                key={org.orgId}
+                                className={`flex items-center justify-between rounded-lg border px-4 py-3 transition-colors ${org.orgId === activeOrgId
+                                    ? 'border-success/40 bg-success/5'
+                                    : 'border-border/60 bg-card hover:bg-muted/50'
+                                    }`}
+                            >
+                                <div className="flex items-center gap-3">
+                                    <span className="font-medium text-foreground">
+                                        {org.orgName}
+                                    </span>
+                                    <Badge
+                                        variant={
+                                            org.role === 'admin'
+                                                ? 'info'
+                                                : org.role === 'developer'
+                                                    ? 'warning'
+                                                    : 'neutral'
+                                        }
+                                    >
+                                        {org.role}
+                                    </Badge>
+                                </div>
+
+                                {org.orgId === activeOrgId ? (
+                                    <Badge variant="success">Active</Badge>
+                                ) : (
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => handleSwitch(org.orgId)}
+                                        disabled={switching !== null}
+                                    >
+                                        {switching === org.orgId ? 'Switching...' : 'Switch'}
+                                    </Button>
+                                )}
                             </div>
+                        ))}
+                    </div>
+                </Card>
 
-                            {org.orgId === activeOrgId ? (
-                                <Badge variant="success">Active</Badge>
-                            ) : (
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => handleSwitch(org.orgId)}
-                                    disabled={switching !== null}
-                                >
-                                    {switching === org.orgId ? 'Switching...' : 'Switch'}
-                                </Button>
-                            )}
-                        </div>
-                    ))}
+                <div>
+                    <LinkButton href="/dashboard" variant="ghost" className="pl-0">
+                        ← Back to Dashboard
+                    </LinkButton>
                 </div>
-            </Card>
-
-            <div className="mt-8">
-                <LinkButton href="/dashboard" variant="ghost" className="pl-0">
-                    ← Back to Dashboard
-                </LinkButton>
             </div>
         </AppShell>
     );

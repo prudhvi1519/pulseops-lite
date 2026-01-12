@@ -107,129 +107,131 @@ export default function ServicesPage() {
                 </Button>
             </PageHeader>
 
-            {error && (
-                <div className="mb-4 rounded-md bg-destructive/15 p-4 text-sm text-destructive">
-                    {error}
-                </div>
-            )}
+            <div className="space-y-6">
+                {error && (
+                    <div className="rounded-md bg-destructive/15 p-4 text-sm text-destructive">
+                        {error}
+                    </div>
+                )}
 
-            {showForm && (
-                <Card padding="lg" className="mb-6">
-                    <form onSubmit={handleCreate}>
-                        <div className="space-y-4">
-                            <div>
-                                <label
-                                    htmlFor="name"
-                                    className="mb-1 block text-sm font-medium text-foreground"
-                                >
-                                    Service Name
-                                </label>
-                                <Input
-                                    id="name"
-                                    type="text"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    required
-                                    placeholder="e.g. auth-service"
-                                />
-                            </div>
-                            <div>
-                                <label
-                                    htmlFor="description"
-                                    className="mb-1 block text-sm font-medium text-foreground"
-                                >
-                                    Description (optional)
-                                </label>
-                                <Input
-                                    id="description"
-                                    type="text"
-                                    value={description}
-                                    onChange={(e) => setDescription(e.target.value)}
-                                    placeholder="Brief description of the service"
-                                />
-                            </div>
-
-                            <div className="mt-6 flex justify-end gap-2">
-                                <Button
-                                    type="button"
-                                    variant="secondary"
-                                    onClick={() => setShowForm(false)}
-                                    disabled={creating}
-                                >
-                                    Cancel
-                                </Button>
-                                <Button
-                                    type="submit"
-                                    disabled={creating}
-                                    className="w-full sm:w-auto"
-                                >
-                                    {creating ? 'Creating...' : 'Create Service'}
-                                </Button>
-                            </div>
-                        </div>
-                    </form>
-                </Card>
-            )}
-
-            {services.length === 0 ? (
-                <Card padding="none">
-                    <EmptyState
-                        title="No services yet"
-                        description="Create your first service to start monitoring."
-                        icon={
-                            <svg
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="1.5"
-                            >
-                                <rect x="3" y="3" width="18" height="18" rx="2" />
-                                <path d="M12 8v8" />
-                                <path d="M8 12h8" />
-                            </svg>
-                        }
-                        action={
-                            !showForm ? (
-                                <Button onClick={() => setShowForm(true)}>
-                                    Create Service
-                                </Button>
-                            ) : undefined
-                        }
-                    />
-                </Card>
-            ) : (
-                <div className="flex flex-col gap-3">
-                    {services.map((service) => (
-                        <Card key={service.id} padding="md" hover>
-                            <Link
-                                href={`/services/${service.id}`}
-                                className="flex items-center justify-between"
-                            >
+                {showForm && (
+                    <Card padding="lg">
+                        <form onSubmit={handleCreate}>
+                            <div className="space-y-4">
                                 <div>
-                                    <h3 className="font-medium text-foreground">
-                                        {service.name}
-                                    </h3>
-                                    {service.description && (
-                                        <p className="mt-1 text-sm text-muted-foreground">
-                                            {service.description}
-                                        </p>
-                                    )}
+                                    <label
+                                        htmlFor="name"
+                                        className="mb-1 block text-sm font-medium text-foreground"
+                                    >
+                                        Service Name
+                                    </label>
+                                    <Input
+                                        id="name"
+                                        type="text"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        required
+                                        placeholder="e.g. auth-service"
+                                    />
                                 </div>
-                                <span className="text-sm text-muted-foreground">
-                                    {service.envCount} env{service.envCount !== 1 ? 's' : ''}
-                                </span>
-                            </Link>
-                        </Card>
-                    ))}
-                </div>
-            )}
+                                <div>
+                                    <label
+                                        htmlFor="description"
+                                        className="mb-1 block text-sm font-medium text-foreground"
+                                    >
+                                        Description (optional)
+                                    </label>
+                                    <Input
+                                        id="description"
+                                        type="text"
+                                        value={description}
+                                        onChange={(e) => setDescription(e.target.value)}
+                                        placeholder="Brief description of the service"
+                                    />
+                                </div>
 
-            <div className="mt-8">
-                <LinkButton href="/dashboard" variant="ghost" className="pl-0">
-                    ← Back to Dashboard
-                </LinkButton>
+                                <div className="mt-6 flex justify-end gap-2">
+                                    <Button
+                                        type="button"
+                                        variant="secondary"
+                                        onClick={() => setShowForm(false)}
+                                        disabled={creating}
+                                    >
+                                        Cancel
+                                    </Button>
+                                    <Button
+                                        type="submit"
+                                        disabled={creating}
+                                        className="w-full sm:w-auto"
+                                    >
+                                        {creating ? 'Creating...' : 'Create Service'}
+                                    </Button>
+                                </div>
+                            </div>
+                        </form>
+                    </Card>
+                )}
+
+                {services.length === 0 ? (
+                    <Card padding="none">
+                        <EmptyState
+                            title="No services yet"
+                            description="Create your first service to start monitoring."
+                            icon={
+                                <svg
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="1.5"
+                                >
+                                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                                    <path d="M12 8v8" />
+                                    <path d="M8 12h8" />
+                                </svg>
+                            }
+                            action={
+                                !showForm ? (
+                                    <Button onClick={() => setShowForm(true)}>
+                                        Create Service
+                                    </Button>
+                                ) : undefined
+                            }
+                        />
+                    </Card>
+                ) : (
+                    <div className="flex flex-col gap-4">
+                        {services.map((service) => (
+                            <Card key={service.id} padding="md" hover>
+                                <Link
+                                    href={`/services/${service.id}`}
+                                    className="flex items-center justify-between"
+                                >
+                                    <div>
+                                        <h3 className="font-medium text-foreground">
+                                            {service.name}
+                                        </h3>
+                                        {service.description && (
+                                            <p className="mt-1 text-sm text-muted-foreground">
+                                                {service.description}
+                                            </p>
+                                        )}
+                                    </div>
+                                    <span className="text-sm text-muted-foreground">
+                                        {service.envCount} env{service.envCount !== 1 ? 's' : ''}
+                                    </span>
+                                </Link>
+                            </Card>
+                        ))}
+                    </div>
+                )}
+
+                <div>
+                    <LinkButton href="/dashboard" variant="ghost" className="pl-0">
+                        ← Back to Dashboard
+                    </LinkButton>
+                </div>
             </div>
         </AppShell>
     );

@@ -45,3 +45,4 @@ coverage
 .env*.local
 
 .generated-secrets.local
+scripts/.env.local

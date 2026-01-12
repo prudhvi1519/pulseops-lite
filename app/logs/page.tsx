@@ -38,11 +38,13 @@ export default async function LogsPage() {
 
     return (
         <AppShell>
-            <PageHeader
-                title="Logs Explorer"
-                description="Search and analyze application logs."
-            />
-            <LogsExplorerClient services={services} />
+            <div className="space-y-6">
+                <PageHeader
+                    title="Logs Explorer"
+                    description="Search and analyze application logs."
+                />
+                <LogsExplorerClient services={services} />
+            </div>
         </AppShell>
     );
 }

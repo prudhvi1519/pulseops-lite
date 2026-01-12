@@ -47,11 +47,13 @@ export default async function IncidentsPage() {
 
     return (
         <AppShell>
-            <PageHeader
-                title="Incidents"
-                description="Monitor and manage system outages and alerts."
-            />
-            <IncidentsClient services={services} />
+            <div className="space-y-6">
+                <PageHeader
+                    title="Incidents"
+                    description="Monitor and manage system outages and alerts."
+                />
+                <IncidentsClient services={services} />
+            </div>
         </AppShell>
     );
 }
