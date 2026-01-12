@@ -8,6 +8,8 @@ import { Card } from '@/components/ui/Card';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { SkeletonLoader } from '@/components/ui/SkeletonLoader';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 interface Service {
     id: string;
@@ -82,7 +84,7 @@ export default function ServicesPage() {
                 <PageHeader title="Services" />
                 <Card padding="lg">
                     <SkeletonLoader height="3rem" />
-                    <div style={{ marginTop: 'var(--spacing-md)' }}>
+                    <div className="mt-4">
                         <SkeletonLoader height="3rem" />
                     </div>
                 </Card>
@@ -92,111 +94,59 @@ export default function ServicesPage() {
 
     return (
         <AppShell>
-            <PageHeader title="Services" description="Manage your services and their environments">
-                <button
-                    onClick={() => setShowForm(!showForm)}
-                    style={{
-                        padding: 'var(--spacing-xs) var(--spacing-md)',
-                        backgroundColor: 'var(--color-text-primary)',
-                        color: 'var(--color-surface)',
-                        border: 'none',
-                        borderRadius: 'var(--radius-md)',
-                        fontSize: 'var(--text-sm)',
-                        cursor: 'pointer',
-                    }}
-                >
+            <PageHeader
+                title="Services"
+                description="Manage your services and their environments"
+            >
+                <Button onClick={() => setShowForm(!showForm)}>
                     {showForm ? 'Cancel' : 'New Service'}
-                </button>
+                </Button>
             </PageHeader>
 
             {error && (
-                <div
-                    style={{
-                        padding: 'var(--spacing-sm) var(--spacing-md)',
-                        backgroundColor: 'var(--color-error-bg)',
-                        color: 'var(--color-error)',
-                        borderRadius: 'var(--radius-md)',
-                        fontSize: 'var(--text-sm)',
-                        marginBottom: 'var(--spacing-md)',
-                    }}
-                >
+                <div className="mb-4 rounded-md bg-destructive/15 p-4 text-sm text-destructive">
                     {error}
                 </div>
             )}
 
             {showForm && (
-                <Card padding="lg" style={{ marginBottom: 'var(--spacing-lg)' }}>
+                <Card padding="lg" className="mb-6">
                     <form onSubmit={handleCreate}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
+                        <div className="flex flex-col gap-4">
                             <div>
                                 <label
                                     htmlFor="name"
-                                    style={{
-                                        display: 'block',
-                                        fontSize: 'var(--text-sm)',
-                                        fontWeight: 500,
-                                        marginBottom: 'var(--spacing-xs)',
-                                    }}
+                                    className="mb-1 block text-sm font-medium text-foreground"
                                 >
                                     Service Name
                                 </label>
-                                <input
+                                <Input
                                     id="name"
                                     type="text"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     required
-                                    style={{
-                                        width: '100%',
-                                        padding: 'var(--spacing-sm) var(--spacing-md)',
-                                        border: '1px solid var(--color-border)',
-                                        borderRadius: 'var(--radius-md)',
-                                        fontSize: 'var(--text-base)',
-                                    }}
+                                    placeholder="e.g. auth-service"
                                 />
                             </div>
                             <div>
                                 <label
                                     htmlFor="description"
-                                    style={{
-                                        display: 'block',
-                                        fontSize: 'var(--text-sm)',
-                                        fontWeight: 500,
-                                        marginBottom: 'var(--spacing-xs)',
-                                    }}
+                                    className="mb-1 block text-sm font-medium text-foreground"
                                 >
                                     Description (optional)
                                 </label>
-                                <input
+                                <Input
                                     id="description"
                                     type="text"
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
-                                    style={{
-                                        width: '100%',
-                                        padding: 'var(--spacing-sm) var(--spacing-md)',
-                                        border: '1px solid var(--color-border)',
-                                        borderRadius: 'var(--radius-md)',
-                                        fontSize: 'var(--text-base)',
-                                    }}
+                                    placeholder="Brief description of the service"
                                 />
                             </div>
-                            <button
-                                type="submit"
-                                disabled={creating}
-                                style={{
-                                    padding: 'var(--spacing-sm) var(--spacing-md)',
-                                    backgroundColor: 'var(--color-text-primary)',
-                                    color: 'var(--color-surface)',
-                                    border: 'none',
-                                    borderRadius: 'var(--radius-md)',
-                                    fontSize: 'var(--text-base)',
-                                    cursor: creating ? 'not-allowed' : 'pointer',
-                                    opacity: creating ? 0.7 : 1,
-                                }}
-                            >
+                            <Button type="submit" disabled={creating} className="w-fit">
                                 {creating ? 'Creating...' : 'Create Service'}
-                            </button>
+                            </Button>
                         </div>
                     </form>
                 </Card>
@@ -208,39 +158,47 @@ export default function ServicesPage() {
                         title="No services yet"
                         description="Create your first service to start monitoring."
                         icon={
-                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                            <svg
+                                width="48"
+                                height="48"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="1.5"
+                            >
                                 <rect x="3" y="3" width="18" height="18" rx="2" />
                                 <path d="M12 8v8" />
                                 <path d="M8 12h8" />
                             </svg>
                         }
+                        action={
+                            !showForm ? (
+                                <Button onClick={() => setShowForm(true)}>
+                                    Create Service
+                                </Button>
+                            ) : undefined
+                        }
                     />
                 </Card>
             ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
+                <div className="flex flex-col gap-3">
                     {services.map((service) => (
-                        <Card key={service.id} padding="md">
+                        <Card key={service.id} padding="md" hover>
                             <Link
                                 href={`/services/${service.id}`}
-                                style={{
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                    textDecoration: 'none',
-                                    color: 'inherit',
-                                }}
+                                className="flex items-center justify-between"
                             >
                                 <div>
-                                    <h3 style={{ fontWeight: 500, color: 'var(--color-text-primary)', margin: 0 }}>
+                                    <h3 className="font-medium text-foreground">
                                         {service.name}
                                     </h3>
                                     {service.description && (
-                                        <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)', margin: 'var(--spacing-xs) 0 0' }}>
+                                        <p className="mt-1 text-sm text-muted-foreground">
                                             {service.description}
                                         </p>
                                     )}
                                 </div>
-                                <span style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-muted)' }}>
+                                <span className="text-sm text-muted-foreground">
                                     {service.envCount} env{service.envCount !== 1 ? 's' : ''}
                                 </span>
                             </Link>
@@ -249,8 +207,11 @@ export default function ServicesPage() {
                 </div>
             )}
 
-            <div style={{ marginTop: 'var(--spacing-lg)' }}>
-                <Link href="/dashboard" style={{ fontSize: 'var(--text-sm)', color: 'var(--color-info)', textDecoration: 'underline' }}>
+            <div className="mt-8">
+                <Link
+                    href="/dashboard"
+                    className="text-sm text-primary hover:underline hover:text-primary/80"
+                >
                     ← Back to Dashboard
                 </Link>
             </div>

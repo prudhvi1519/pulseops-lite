@@ -19,7 +19,7 @@ export function EmptyState({ title, description, icon, action }: EmptyStateProps
                 {title}
             </h3>
             {description && (
-                <p className="max-w-sm text-sm text-muted-foreground">
+                <p className="max-w-[28rem] mx-auto text-sm text-muted-foreground leading-relaxed">
                     {description}
                 </p>
             )}

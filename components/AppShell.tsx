@@ -12,7 +12,7 @@ export function AppShell({ children }: AppShellProps) {
         <div className="flex min-h-screen flex-col bg-background">
             {/* Header */}
             <header className="border-b bg-card">
-                <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+                <div className="container mx-auto flex h-16 max-w-[72rem] items-center justify-between px-4 sm:px-6 lg:px-8">
                     <Link href="/dashboard" className="text-lg font-semibold text-foreground hover:opacity-80 transition-opacity">
                         {appName}
                     </Link>
@@ -21,7 +21,7 @@ export function AppShell({ children }: AppShellProps) {
 
             {/* Main content */}
             <main className="flex-1 py-10">
-                <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div className="container mx-auto max-w-[72rem] px-4 sm:px-6 lg:px-8">
                     {children}
                 </div>
             </main>
