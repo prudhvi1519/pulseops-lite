@@ -98,7 +98,10 @@ export default function ServicesPage() {
                 title="Services"
                 description="Manage your services and their environments"
             >
-                <Button onClick={() => setShowForm(!showForm)}>
+                <Button
+                    onClick={() => setShowForm(!showForm)}
+                    variant={showForm ? "secondary" : "default"}
+                >
                     {showForm ? 'Cancel' : 'New Service'}
                 </Button>
             </PageHeader>
@@ -112,7 +115,7 @@ export default function ServicesPage() {
             {showForm && (
                 <Card padding="lg" className="mb-6">
                     <form onSubmit={handleCreate}>
-                        <div className="flex flex-col gap-4">
+                        <div className="space-y-4">
                             <div>
                                 <label
                                     htmlFor="name"
@@ -144,23 +147,38 @@ export default function ServicesPage() {
                                     placeholder="Brief description of the service"
                                 />
                             </div>
-                            <Button type="submit" disabled={creating} className="w-fit">
-                                {creating ? 'Creating...' : 'Create Service'}
-                            </Button>
+
+                            <div className="mt-6 flex justify-end gap-2">
+                                <Button
+                                    type="button"
+                                    variant="secondary"
+                                    onClick={() => setShowForm(false)}
+                                    disabled={creating}
+                                >
+                                    Cancel
+                                </Button>
+                                <Button
+                                    type="submit"
+                                    disabled={creating}
+                                    className="w-full sm:w-auto"
+                                >
+                                    {creating ? 'Creating...' : 'Create Service'}
+                                </Button>
+                            </div>
                         </div>
                     </form>
                 </Card>
             )}
 
             {services.length === 0 ? (
-                <Card padding="lg">
+                <Card padding="none">
                     <EmptyState
                         title="No services yet"
                         description="Create your first service to start monitoring."
                         icon={
                             <svg
-                                width="48"
-                                height="48"
+                                width="24"
+                                height="24"
                                 viewBox="0 0 24 24"
                                 fill="none"
                                 stroke="currentColor"
@@ -208,12 +226,11 @@ export default function ServicesPage() {
             )}
 
             <div className="mt-8">
-                <Link
-                    href="/dashboard"
-                    className="text-sm text-primary hover:underline hover:text-primary/80"
-                >
-                    ← Back to Dashboard
-                </Link>
+                <Button variant="ghost" asChild className="pl-0 hover:bg-transparent hover:text-primary">
+                    <Link href="/dashboard">
+                        ← Back to Dashboard
+                    </Link>
+                </Button>
             </div>
         </AppShell>
     );

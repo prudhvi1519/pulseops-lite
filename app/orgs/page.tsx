@@ -2,10 +2,12 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { AppShell } from '@/components/AppShell';
 import { Card } from '@/components/ui/Card';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/button';
 import { SkeletonLoader } from '@/components/ui/SkeletonLoader';
 
 interface Org {
@@ -88,7 +90,7 @@ export default function OrgsPage() {
                 <PageHeader title="Organizations" />
                 <Card padding="lg">
                     <SkeletonLoader height="3rem" />
-                    <div style={{ marginTop: 'var(--spacing-md)' }}>
+                    <div className="mt-4">
                         <SkeletonLoader height="3rem" />
                     </div>
                 </Card>
@@ -104,45 +106,23 @@ export default function OrgsPage() {
             />
 
             {error && (
-                <div
-                    style={{
-                        padding: 'var(--spacing-sm) var(--spacing-md)',
-                        backgroundColor: 'var(--color-error-bg)',
-                        color: 'var(--color-error)',
-                        borderRadius: 'var(--radius-md)',
-                        fontSize: 'var(--text-sm)',
-                        marginBottom: 'var(--spacing-md)',
-                    }}
-                >
+                <div className="mb-4 rounded-md bg-destructive/15 p-4 text-sm text-destructive">
                     {error}
                 </div>
             )}
 
             <Card padding="lg">
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
+                <div className="flex flex-col gap-2">
                     {orgs.map((org) => (
                         <div
                             key={org.orgId}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                padding: 'var(--spacing-md)',
-                                backgroundColor:
-                                    org.orgId === activeOrgId
-                                        ? 'var(--color-success-bg)'
-                                        : 'var(--color-background)',
-                                borderRadius: 'var(--radius-md)',
-                                border: '1px solid var(--color-border)',
-                            }}
+                            className={`flex items-center justify-between rounded-lg border p-4 transition-colors ${org.orgId === activeOrgId
+                                    ? 'border-success/50 bg-success/5'
+                                    : 'border-transparent bg-muted/50 hover:bg-muted'
+                                }`}
                         >
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
-                                <span
-                                    style={{
-                                        fontWeight: 500,
-                                        color: 'var(--color-text-primary)',
-                                    }}
-                                >
+                            <div className="flex items-center gap-3">
+                                <span className="font-medium text-foreground">
                                     {org.orgName}
                                 </span>
                                 <Badge
@@ -161,39 +141,26 @@ export default function OrgsPage() {
                             {org.orgId === activeOrgId ? (
                                 <Badge variant="success">Active</Badge>
                             ) : (
-                                <button
+                                <Button
+                                    variant="outline"
+                                    size="sm"
                                     onClick={() => handleSwitch(org.orgId)}
                                     disabled={switching !== null}
-                                    style={{
-                                        padding: 'var(--spacing-xs) var(--spacing-md)',
-                                        backgroundColor: 'var(--color-surface)',
-                                        color: 'var(--color-text-primary)',
-                                        border: '1px solid var(--color-border)',
-                                        borderRadius: 'var(--radius-md)',
-                                        fontSize: 'var(--text-sm)',
-                                        cursor: switching !== null ? 'not-allowed' : 'pointer',
-                                        opacity: switching !== null ? 0.7 : 1,
-                                    }}
                                 >
                                     {switching === org.orgId ? 'Switching...' : 'Switch'}
-                                </button>
+                                </Button>
                             )}
                         </div>
                     ))}
                 </div>
             </Card>
 
-            <div style={{ marginTop: 'var(--spacing-lg)' }}>
-                <a
-                    href="/dashboard"
-                    style={{
-                        fontSize: 'var(--text-sm)',
-                        color: 'var(--color-info)',
-                        textDecoration: 'underline',
-                    }}
-                >
-                    ← Back to Dashboard
-                </a>
+            <div className="mt-8">
+                <Button variant="ghost" asChild className="pl-0 hover:bg-transparent hover:text-primary">
+                    <Link href="/dashboard">
+                        ← Back to Dashboard
+                    </Link>
+                </Button>
             </div>
         </AppShell>
     );
