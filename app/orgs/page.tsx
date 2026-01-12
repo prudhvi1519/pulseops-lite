@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { AppShell } from '@/components/AppShell';
 import { LinkButton } from '@/components/ui/LinkButton';
 import { Card } from '@/components/ui/Card';
