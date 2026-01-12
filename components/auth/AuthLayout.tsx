@@ -23,7 +23,7 @@ export function AuthLayout({ children }: AuthLayoutProps) {
                             Lite
                         </span>
                     </Link>
-                    <p className="text-sm text-muted-foreground max-w-xs">
+                    <p className="text-sm text-muted-foreground max-w-[24rem] mx-auto leading-relaxed">
                         Logs, alerts, incidents. Multi-tenant. Automated jobs.
                     </p>
                 </div>

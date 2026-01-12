@@ -1,24 +1,42 @@
 @import "tailwindcss";
 
-:root {
-  /* Colors - Light first design */
-  --color-primary: #6366f1;
+@theme {
+  /* Colors */
   --color-background: #fafafa;
-  --color-surface: #ffffff;
+  --color-foreground: #171717;
+
+  --color-card: #ffffff;
+  --color-card-foreground: #171717;
+
+  --color-popover: #ffffff;
+  --color-popover-foreground: #171717;
+
+  --color-primary: rgb(99 102 241);
+  --color-primary-foreground: #ffffff;
+
+  --color-secondary: #ffffff;
+  --color-secondary-foreground: #171717;
+
+  --color-muted: #f5f5f5;
+  --color-muted-foreground: #737373;
+
+  --color-accent: #f4f4f5;
+  --color-accent-foreground: #18181b;
+
+  --color-destructive: rgb(239 68 68);
+  --color-destructive-foreground: #ffffff;
+
   --color-border: #e5e5e5;
-  --color-border-subtle: #f0f0f0;
+  --color-input: #e5e5e5;
+  --color-ring: rgb(99 102 241);
 
-  --color-text-primary: #171717;
-  --color-text-secondary: #525252;
-  --color-text-muted: #a3a3a3;
-
-  --color-success: #22c55e;
+  --color-success: rgb(34 197 94);
   --color-success-bg: #f0fdf4;
-  --color-warning: #f59e0b;
+  --color-warning: rgb(245 158 11);
   --color-warning-bg: #fffbeb;
-  --color-error: #ef4444;
+  --color-error: rgb(239 68 68);
   --color-error-bg: #fef2f2;
-  --color-info: #3b82f6;
+  --color-info: rgb(59 130 246);
   --color-info-bg: #eff6ff;
 
   /* Spacing */
@@ -35,33 +53,24 @@
   --radius-lg: 0.75rem;
   --radius-xl: 1rem;
 
-  /* Typography */
-  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
-
-  --text-xs: 0.75rem;
-  --text-sm: 0.875rem;
-  --text-base: 1rem;
-  --text-lg: 1.125rem;
-  --text-xl: 1.25rem;
-  --text-2xl: 1.5rem;
-  --text-3xl: 1.875rem;
-
-  /* Shadows - minimal for light-first design */
+  /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
 
-  /* Navbar height for scroll offset */
+/* Custom Utilities (Outside @theme but using theme vars) */
+:root {
   --navbar-height: 64px;
 }
 
+/* Base Styles */
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
 }
 
-/* Smooth scrolling - respects reduced motion */
 html {
   scroll-behavior: smooth;
 }
@@ -76,9 +85,9 @@ html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
-  font-family: var(--font-sans);
+  font-family: system-ui, -apple-system, sans-serif;
   background-color: var(--color-background);
-  color: var(--color-text-primary);
+  color: var(--color-foreground);
   line-height: 1.5;
 }
 
@@ -90,17 +99,15 @@ a {
 code,
 pre,
 .mono {
-  font-family: var(--font-mono);
+  font-family: ui-monospace, monospace;
 }
 
-/* Scroll margin for sticky navbar offset */
 section[id] {
   scroll-margin-top: var(--navbar-height);
 }
 
 /* --- Visual Polish Utilities --- */
 
-/* Card hover lift */
 .hover-lift {
   transition: transform 200ms ease, box-shadow 200ms ease;
 }
@@ -110,7 +117,6 @@ section[id] {
   box-shadow: var(--shadow-md);
 }
 
-/* Badge/Button hover scale */
 .hover-scale {
   transition: transform 150ms ease, box-shadow 150ms ease;
 }
@@ -120,7 +126,6 @@ section[id] {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-/* Primary CTA hover glow */
 .hover-glow {
   transition: transform 150ms ease, box-shadow 150ms ease;
 }
@@ -130,40 +135,38 @@ section[id] {
   box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
 
-/* Secondary CTA hover */
 .hover-border {
   transition: background-color 150ms ease, border-color 150ms ease;
 }
 
 .hover-border:hover {
   background-color: var(--color-background);
-  border-color: var(--color-text-muted);
+  border-color: var(--color-input);
 }
 
-/* Tab Button Styles */
 .tab-btn {
   padding: var(--spacing-sm) var(--spacing-md);
-  font-size: var(--text-sm);
+  font-size: 0.875rem;
   font-weight: 500;
   border: none;
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: all 150ms;
-  background-color: var(--color-surface);
-  color: var(--color-text-secondary);
+  background-color: var(--color-card);
+  color: var(--color-muted-foreground);
 }
 
 .tab-btn:hover:not([aria-selected="true"]) {
-  background-color: var(--color-background);
-  color: var(--color-text-primary);
+  background-color: var(--color-muted);
+  color: var(--color-foreground);
 }
 
 .tab-btn[aria-selected="true"] {
-  background-color: #6366f1;
-  color: #fff;
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
 }
 
 .tab-btn:focus-visible {
-  outline: 2px solid #6366f1;
+  outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }

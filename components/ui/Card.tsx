@@ -19,7 +19,7 @@ export function Card({ children, className = '', padding = 'md', style, onClick,
 
     return (
         <div
-            className={`bg-card text-card-foreground border border-border/50 shadow-sm rounded-xl ${paddingClass} ${hover ? 'hover-lift' : ''} ${onClick ? 'cursor-pointer' : ''} ${className}`}
+            className={`bg-card text-card-foreground border border-border/60 shadow-sm rounded-xl ${paddingClass} ${hover ? 'hover-lift' : ''} ${onClick ? 'cursor-pointer' : ''} ${className}`}
             onClick={onClick}
             style={style}
         >
