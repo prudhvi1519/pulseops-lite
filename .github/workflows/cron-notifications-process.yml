@@ -5,9 +5,14 @@ on:
     - cron: '*/5 * * * *' # Every 5 minutes
   workflow_dispatch: # Manual trigger
 
+concurrency:
+  group: cron-process-notifications
+  cancel-in-progress: true
+
 jobs:
   process-notifications:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - name: Call Processor Endpoint
         env:
