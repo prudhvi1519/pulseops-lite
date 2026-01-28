@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { SkeletonLoader } from '@/components/ui/SkeletonLoader';
+import { EmptyState } from '@/components/ui/EmptyState';
 import Link from 'next/link';
 
 interface Deployment {
@@ -45,27 +46,35 @@ export function LatestDeployments() {
     if (deployments.length === 0) {
         return (
             <Card padding="lg">
-                <div style={{ textAlign: 'center', color: 'var(--color-text-muted)', fontSize: 'var(--text-sm)' }}>
-                    No recent deployments
-                </div>
+                <EmptyState
+                    title="No recent deployments"
+                    description="Trigger a deployment to see it here."
+                    icon={
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M12 2v10" />
+                            <path d="M12 16h.01" />
+                            <path d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10z" />
+                        </svg>
+                    }
+                />
             </Card>
         );
     }
 
     return (
         <Card padding="lg">
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--spacing-md)' }}>
-                <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 500 }}>Latest Deployments</h3>
-                <Link href="/deployments" style={{ fontSize: 'var(--text-sm)', color: 'var(--color-primary)' }}>View All</Link>
+            <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-medium">Latest Deployments</h3>
+                <Link href="/deployments" className="text-sm text-primary hover:underline">View All</Link>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
+            <div className="flex flex-col gap-2">
                 {deployments.map(d => (
-                    <div key={d.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 'var(--spacing-xs) 0', borderBottom: '1px solid var(--color-border)' }}>
+                    <div key={d.id} className="flex items-center justify-between py-2 border-b border-border last:border-0">
                         <div>
-                            <div style={{ fontSize: 'var(--text-sm)', fontWeight: 500 }}>
-                                {d.serviceName} <span style={{ color: 'var(--color-text-muted)' }}>/ {d.environmentName}</span>
+                            <div className="text-sm font-medium">
+                                {d.serviceName} <span className="text-muted-foreground">/ {d.environmentName}</span>
                             </div>
-                            <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)' }}>
+                            <div className="text-xs text-muted-foreground">
                                 {d.commitMessage || 'No message'} ({d.commitSha?.slice(0, 7)})
                             </div>
                         </div>

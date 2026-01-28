@@ -79,22 +79,14 @@ export function LogsExplorerClient({ services }: LogsExplorerClientProps) {
     // 1. No Services Existence Check
     if (services.length === 0) {
         return (
-            <div style={{ padding: 'var(--spacing-2xl)' }}>
+            <div className="p-8">
                 <EmptyState
                     title="No Services Found"
                     description="You need to create a service before you can ingest logs."
                     action={
                         <Link
                             href="/services"
-                            style={{
-                                display: 'inline-block',
-                                padding: 'var(--spacing-sm) var(--spacing-md)',
-                                backgroundColor: 'var(--color-primary)',
-                                color: 'var(--color-on-primary)',
-                                borderRadius: 'var(--radius-md)',
-                                textDecoration: 'none',
-                                fontWeight: 500
-                            }}
+                            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
                         >
                             Go to Services
                         </Link>
@@ -110,12 +102,7 @@ export function LogsExplorerClient({ services }: LogsExplorerClientProps) {
             <FilterBar services={services} />
 
             {error && (
-                <div style={{
-                    padding: 'var(--spacing-md)',
-                    color: 'var(--color-danger)',
-                    backgroundColor: 'rgba(255, 0, 0, 0.05)',
-                    borderBottom: '1px solid var(--color-danger)'
-                }}>
+                <div className="mb-4 rounded-md bg-destructive/10 p-4 text-sm text-destructive border-b border-destructive/20">
                     {error}
                 </div>
             )}
@@ -126,25 +113,18 @@ export function LogsExplorerClient({ services }: LogsExplorerClientProps) {
                     <LogsTable logs={logs} onLogSelect={setSelectedLog} />
 
                     {/* Load More / Loading indicator */}
-                    <div style={{ padding: 'var(--spacing-md)', textAlign: 'center' }}>
+                    <div className="p-4 text-center">
                         {loading ? (
                             <SkeletonLoader height="40px" />
                         ) : nextCursor ? (
                             <button
                                 onClick={handleLoadMore}
-                                style={{
-                                    padding: 'var(--spacing-sm) var(--spacing-md)',
-                                    backgroundColor: 'var(--color-surface-hover)',
-                                    border: '1px solid var(--color-border)',
-                                    borderRadius: 'var(--radius-md)',
-                                    cursor: 'pointer',
-                                    fontSize: 'var(--text-sm)'
-                                }}
+                                className="inline-flex items-center justify-center rounded-md border border-border bg-secondary px-4 py-2 text-sm font-medium hover:bg-secondary/80"
                             >
                                 Load More
                             </button>
                         ) : (
-                            <div style={{ color: 'var(--color-text-muted)', fontSize: 'var(--text-sm)' }}>
+                            <div className="text-sm text-muted-foreground">
                                 End of logs
                             </div>
                         )}
@@ -152,9 +132,9 @@ export function LogsExplorerClient({ services }: LogsExplorerClientProps) {
                 </>
             ) : (
                 // Empty Logs or Initial Loading
-                <div style={{ padding: 'var(--spacing-2xl)' }}>
+                <div className="p-8">
                     {loading ? (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
+                        <div className="flex flex-col gap-4">
                             <SkeletonLoader height="40px" />
                             <SkeletonLoader height="40px" />
                             <SkeletonLoader height="40px" />
@@ -169,8 +149,8 @@ export function LogsExplorerClient({ services }: LogsExplorerClientProps) {
                             }
                             action={
                                 Array.from(searchParams.keys()).length === 0 ? (
-                                    <div style={{ textAlign: 'left', maxWidth: '600px', margin: '0 auto' }}>
-                                        <p style={{ marginBottom: 'var(--spacing-sm)', fontSize: 'var(--text-sm)' }}>
+                                    <div className="mx-auto max-w-lg text-left">
+                                        <p className="mb-2 text-sm text-foreground">
                                             Use your API Key to ingest logs:
                                         </p>
                                         <CodeBlock
@@ -180,8 +160,8 @@ export function LogsExplorerClient({ services }: LogsExplorerClientProps) {
   -d '{"logs": [{"level": "info", "message": "Hello World", "timestamp": "${new Date().toISOString()}"}]}'`}
                                             language="bash"
                                         />
-                                        <div style={{ marginTop: 'var(--spacing-md)', textAlign: 'center' }}>
-                                            <Link href="/services" style={{ color: 'var(--color-primary)', fontSize: 'var(--text-sm)' }}>
+                                        <div className="mt-4 text-center">
+                                            <Link href="/services" className="text-sm text-primary hover:underline">
                                                 Manage API Keys in Services
                                             </Link>
                                         </div>

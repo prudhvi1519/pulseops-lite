@@ -117,7 +117,7 @@ export default function OrgsPage() {
                         {orgs.map((org) => (
                             <div
                                 key={org.orgId}
-                                className={`flex items-center justify-between rounded-lg border px-4 py-3 transition-colors ${org.orgId === activeOrgId
+                                className={`flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-lg border px-4 py-3 transition-colors ${org.orgId === activeOrgId
                                     ? 'border-success/40 bg-success/5'
                                     : 'border-border/60 bg-card hover:bg-muted/50'
                                     }`}
@@ -140,13 +140,14 @@ export default function OrgsPage() {
                                 </div>
 
                                 {org.orgId === activeOrgId ? (
-                                    <Badge variant="success">Active</Badge>
+                                    <Badge variant="success" className="w-fit">Active</Badge>
                                 ) : (
                                     <Button
                                         variant="outline"
                                         size="sm"
                                         onClick={() => handleSwitch(org.orgId)}
                                         disabled={switching !== null}
+                                        className="w-full sm:w-auto"
                                     >
                                         {switching === org.orgId ? 'Switching...' : 'Switch'}
                                     </Button>

@@ -95,7 +95,7 @@ export default function DashboardPage() {
                 title="Dashboard"
                 description={`Welcome back${user?.name ? `, ${user.name}` : ''}`}
             >
-                <Button variant="outline" onClick={handleLogout}>
+                <Button variant="outline" onClick={handleLogout} className="w-full sm:w-auto">
                     Sign Out
                 </Button>
             </PageHeader>
@@ -105,7 +105,7 @@ export default function DashboardPage() {
                     <div className="flex flex-col gap-6">
                         {/* Organization Context */}
                         <Card padding="lg">
-                            <div className="flex items-center justify-between">
+                            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                                 <div>
                                     <p className="mb-1 text-xs text-muted-foreground">
                                         Current Organization
@@ -130,7 +130,7 @@ export default function DashboardPage() {
 
                                 <Link
                                     href="/orgs"
-                                    className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                                    className="inline-flex w-full sm:w-auto items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                                 >
                                     Switch Org
                                 </Link>
@@ -141,14 +141,14 @@ export default function DashboardPage() {
                         {diagnostics && (
                             <Card padding="lg">
                                 <h3 className="mb-4 text-lg font-medium">System Health</h3>
-                                <div className="flex gap-8">
-                                    <div className="text-center">
+                                <div className="grid grid-cols-2 gap-4 sm:flex sm:gap-8">
+                                    <div className="rounded-lg bg-muted/40 p-3 text-center sm:bg-transparent sm:p-0">
                                         <div className={`text-2xl font-bold ${diagnostics.incidents.open !== '0' ? 'text-destructive' : 'text-success'}`}>
                                             {diagnostics.incidents.open}
                                         </div>
                                         <div className="text-xs text-muted-foreground">Open Incidents</div>
                                     </div>
-                                    <div className="text-center">
+                                    <div className="rounded-lg bg-muted/40 p-3 text-center sm:bg-transparent sm:p-0">
                                         <div className={`text-2xl font-bold ${diagnostics.notifications.failed !== '0' ? 'text-warning' : 'text-foreground'}`}>
                                             {diagnostics.notifications.failed}
                                         </div>
@@ -160,17 +160,17 @@ export default function DashboardPage() {
 
                         {/* Quick Links */}
                         <Card padding="md">
-                            <div className="flex flex-wrap gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <Link
                                     href="/services"
-                                    className="flex min-w-[150px] flex-1 flex-col items-center justify-center rounded-md border border-border bg-background p-4 text-center transition-colors hover:bg-accent hover:text-accent-foreground"
+                                    className="flex flex-col items-center justify-center rounded-md border border-border bg-background p-4 text-center transition-colors hover:bg-accent hover:text-accent-foreground"
                                 >
                                     <div className="font-medium">Services</div>
                                     <div className="text-xs text-muted-foreground">Manage services & API keys</div>
                                 </Link>
                                 <Link
                                     href="/logs"
-                                    className="flex min-w-[150px] flex-1 flex-col items-center justify-center rounded-md border border-border bg-background p-4 text-center transition-colors hover:bg-accent hover:text-accent-foreground"
+                                    className="flex flex-col items-center justify-center rounded-md border border-border bg-background p-4 text-center transition-colors hover:bg-accent hover:text-accent-foreground"
                                 >
                                     <div className="font-medium">Logs Explorer</div>
                                     <div className="text-xs text-muted-foreground">Search & analyze logs</div>
