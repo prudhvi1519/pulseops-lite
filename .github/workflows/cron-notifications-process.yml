@@ -10,7 +10,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Call Processor Endpoint
+        env:
+          PROD_URL: ${{ secrets.CRON_BASE_URL }}
+          INTERNAL_CRON_SECRET: ${{ secrets.INTERNAL_CRON_SECRET }}
+          VERCEL_PROTECTION_BYPASS: ${{ secrets.VERCEL_PROTECTION_BYPASS }}
         run: |
-          curl -X POST "${{ secrets.CRON_BASE_URL }}/api/v1/notifications/process?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=${{ secrets.VERCEL_PROTECTION_BYPASS }}" \
-          -H "x-internal-cron-secret: ${{ secrets.INTERNAL_CRON_SECRET }}" \
-          -H "Content-Type: application/json"
+          set -euo pipefail
+
+          PROD_URL="${PROD_URL:-https://pulseops-lite.vercel.app}"
+          ENDPOINT="/api/v1/notifications/process"
+
+          URL="${PROD_URL}${ENDPOINT}?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=${VERCEL_PROTECTION_BYPASS}"
+          SAFE_URL="${PROD_URL}${ENDPOINT}?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=REDACTED"
+
+          echo "Request: POST ${SAFE_URL}"
+
+          status=$(curl -sS -D headers.txt -o body.txt -w "%{http_code}" \
+            -X POST "$URL" \
+            -H "x-internal-cron-secret: ${INTERNAL_CRON_SECRET}" \
+          )
+
+          echo "HTTP Status: $status"
+          ctype=$(grep -i "^content-type:" headers.txt | head -n 1 || true)
+          echo "Content-Type: ${ctype:-unknown}"
+          echo "Body (first 300 chars):"
+          head -c 300 body.txt || true
+          echo
+
+          if [ "$status" -lt 200 ] || [ "$status" -ge 300 ]; then
+            echo "Non-2xx response. Failing workflow."
+            exit 1
+          fi
