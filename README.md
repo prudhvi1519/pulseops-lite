@@ -20,6 +20,7 @@ PulseOps Lite is a multi-tenant observability platform that runs entirely on **V
 *   [Screenshots](#screenshots)
 *   [Features](#-features)
 *   [Tech Stack](#tech-stack)
+*   [File Structure](#file-structure)
 *   [Architecture](#-architecture)
 *   [API Endpoints](#-api-endpoints)
 *   [Scheduling](#-scheduling)
@@ -60,6 +61,46 @@ _See `docs/screens/` for mobile views._
 *   **Language**: TypeScript
 *   **Styling**: Tailwind CSS
 *   **Deploy**: Vercel Serverless
+
+## File Structure
+
+<details>
+  <summary><b>Show folder layout</b></summary>
+
+```text
+.
+├── .github/
+│   └── workflows/
+├── app/
+│   ├── api/
+│   │   ├── internal/
+│   │   └── v1/
+│   ├── dashboard/
+│   ├── diagnostics/
+│   ├── incidents/
+│   ├── logs/
+│   └── page.tsx
+├── components/
+├── db/
+│   └── migrations/
+├── docs/
+│   ├── screens/
+│   └── architecture.md
+├── lib/
+│   ├── cron/
+│   └── db/
+├── scripts/
+├── tests/
+├── .env.example
+├── EXTERNAL_CRON_SETUP.md
+├── package.json
+├── README.md
+├── SECURITY_WARNING.md
+├── vercel.json
+└── VERCEL_LIMITS.md
+```
+
+</details>
 
 ## 🧱 Architecture
 
