@@ -3,49 +3,34 @@ import crypto from 'crypto';
 
 /**
  * Validates the request authentication for Cron Jobs.
- * Request must be POST.
- * Supports:
- * 1. Vercel Cron (Authorization: Bearer <CRON_SECRET>)
- * 2. Query Param (cron_secret=<INTERNAL_CRON_SECRET>)
+ * Strict Mode:
+ * 1. Method: POST only.
+ * 2. Auth: Header 'x-internal-cron-secret' only.
  */
 export async function validateCronRequest(req: NextRequest): Promise<NextResponse | null> {
-    // 1. Check Method (Allow GET for Vercel Cron, POST for manual)
-    // Vercel Cron sends GET requests. We must allow GET.
-    if (req.method !== 'POST' && req.method !== 'GET') {
-        return NextResponse.json({ error: 'Method Not Allowed', message: 'Only POST and GET are allowed' }, { status: 405 });
+    // 1. Enforce POST
+    if (req.method !== 'POST') {
+        return NextResponse.json({ error: 'Method Not Allowed', message: 'Only POST is allowed' }, { status: 405 });
     }
 
-    const CRON_SECRET = process.env.CRON_SECRET;
     const INTERNAL_SECRET = process.env.INTERNAL_CRON_SECRET;
     if (!INTERNAL_SECRET) {
-        console.warn('INTERNAL_CRON_SECRET is not set');
+        console.error('INTERNAL_CRON_SECRET is not configured on server');
+        return NextResponse.json({ error: 'Server Configuration Error', message: 'Cron secret not configured' }, { status: 500 });
     }
 
-    // 2. Check Vercel Native Cron Secret (Authorization Header)
-    const authHeader = req.headers.get('authorization');
-    if (CRON_SECRET && authHeader === `Bearer ${CRON_SECRET}`) {
-        return null; // Authorized
+    // 2. Check Header (x-internal-cron-secret) with Timing Safe Compare
+    const headerSecret = req.headers.get('x-internal-cron-secret');
+    if (!headerSecret) {
+        return NextResponse.json({ error: 'Unauthorized', message: 'Missing cron credentials' }, { status: 401 });
     }
 
-    const url = new URL(req.url);
-    const querySecret = url.searchParams.get('cron_secret');
+    const expected = Buffer.from(INTERNAL_SECRET);
+    const actual = Buffer.from(headerSecret);
 
-    if (querySecret) {
-        if (!INTERNAL_SECRET) {
-            console.error('INTERNAL_CRON_SECRET is not configured on server');
-            return NextResponse.json({ error: 'Server Configuration Error', message: 'Cron secret not configured' }, { status: 500 });
-        }
-        const expected = Buffer.from(INTERNAL_SECRET);
-        const actual = Buffer.from(querySecret);
-
-        if (expected.length === actual.length && crypto.timingSafeEqual(expected, actual)) {
-            return null; // Authorized
-        }
+    if (expected.length !== actual.length || !crypto.timingSafeEqual(expected, actual)) {
+        return NextResponse.json({ error: 'Unauthorized', message: 'Invalid cron credentials' }, { status: 401 });
     }
 
-    // Unauthorized
-    return NextResponse.json(
-        { error: 'Unauthorized', message: 'Missing or invalid cron credentials' },
-        { status: 401 }
-    );
+    return null; // Authorized
 }
