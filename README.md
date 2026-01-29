@@ -4,55 +4,116 @@
 [![Demo](https://img.shields.io/badge/demo-live-success)](https://pulseops-lite.vercel.app)
 [![Repo](https://img.shields.io/badge/repo-github-gray)](https://github.com/prudhvi1519/pulseops-lite)
 
-**PulseOps Lite** is a lightweight, multi-tenant observability and incident management platform built for modern engineering teams. It provides log ingestion, automated alert rules, and incident tracking in a clean, developer-centric UI.
+> **Logs + Alerts + Incidents** for small teams on free-tier infrastructure.
+
+PulseOps Lite is a multi-tenant observability platform that runs entirely on **Vercel Hobby** and **Vercel Postgres**. It fills the gap between "console.log" and Enterprise tools, offering structured logging, automated alert rules, and incident management without the fixed costs.
+
+*   **Multi-Tenant**: Role-based access for multiple organizations.
+*   **Cron-Driven**: Reliable background processing for rules and notifications.
+*   **Admin Diagnostics**: Built-in health dashboard for system operators.
 
 **Live Demo**: [https://pulseops-lite.vercel.app](https://pulseops-lite.vercel.app)
 
 ---
 
 ## Table of Contents
-*   [Overview](#overview)
 *   [Screenshots](#screenshots)
-*   [Features](#features)
+*   [Features](#-features)
 *   [Tech Stack](#tech-stack)
-*   [Quickstart](#quickstart)
-*   [Architecture](#architecture)
-*   [API Endpoints](#api-endpoints)
-*   [Scheduling](#scheduling)
-*   [Security](#security)
-*   [Diagnostics](#diagnostics)
+*   [Architecture](#-architecture)
+*   [API Endpoints](#-api-endpoints)
+*   [Scheduling](#-scheduling)
+*   [Security](#-security)
+*   [Project Status](#project-status)
+*   [Quickstart](#-quickstart)
 *   [Deployment](#deployment)
-*   [Troubleshooting](#troubleshooting)
 *   [Related Documentation](#related-documentation)
 
 ---
 
-## Overview
-PulseOps Lite solves the "observability gap" for small teams who need robust logging and alerting without the enterprise price tag of Datadog or Splunk. It runs entirely on free-tier infrastructure (Vercel Hobby + Neon/Supabase).
-
 ## Screenshots
-![Dashboard](./docs/screens/prod/desktop/04_dashboard.png)
-*Real-time dashboard showing logs and recent incidents.*
 
-## Features
-*   **Multi-Tenant**: Support for multiple organizations with role-based access.
-*   **Log Ingestion**: High-volume log ingestion via HTTP API.
-*   **Automated Rules**: Real-time evaluation of error rates and deployment failures.
-*   **Incident Tracking**: Full lifecycle management (Open -> Investigating -> Resolved) with audit trails.
-*   **Cron Workflows**: Reliable background processing for alerts and cleanup.
-*   **Diagnostics**: Admin-only health dashboard for system maintenance.
+| **Dashboard** | **Log Explorer** |
+|:---:|:---:|
+| ![][dashboard] | ![][logs] |
+| **Incidents** | **Organization** |
+| ![][incidents] | ![][orgs] |
+
+[dashboard]: ./docs/screens/prod/desktop/04_dashboard.png
+[logs]: ./docs/screens/prod/desktop/06_logs.png
+[incidents]: ./docs/screens/prod/desktop/07_incidents.png
+[orgs]: ./docs/screens/prod/desktop/08_orgs.png
+
+_See `docs/screens/` for mobile views._
+
+## ✨ Features
+*   **Log Ingestion**: High-throughput HTTP API for structured JSON logs.
+*   **Automated Rules**: Configurable error rate thresholds and deployment failure checks.
+*   **Incident Lifecycle**: Track state (Open, Investigating, Resolved) with audit trails.
+*   **Notifications**: Webhook integration (Slack/Discord) with retry logic.
+*   **Data Retention**: Automated daily cleanup of old logs.
+*   **Diagnostics**: Admin-only view to monitor cron job success/failure.
 
 ## Tech Stack
 *   **Framework**: Next.js 15 (App Router, Server Actions)
+*   **Database**: Vercel Postgres (`@vercel/postgres`)
 *   **Language**: TypeScript
-*   **Database**: PostgreSQL
 *   **Styling**: Tailwind CSS
-*   **Deployment**: Vercel
-*   **Cron**: Hybrid (Vercel Native + External)
+*   **Deploy**: Vercel Serverless
 
-## Quickstart
+## 🧱 Architecture
 
-Get running in minutes locally:
+```mermaid
+graph TD
+    Client[Client Apps] -->|POST JSON| Ingest[/api/v1/logs/ingest]
+    Ingest -->|Insert| DB[(Vercel Postgres)]
+    
+    subgraph "Background Processing"
+        ExtCron[External Cron] -->|POST 10m| Proxy[Proxy Endpoints]
+        VercelCron[Vercel Native] -->|Daily| Cleanup[Cleanup Job]
+        
+        Proxy -->|Trigger| Logic[Job Logic]
+        Logic -->|Read logs| DB
+        Logic -->|Create Incident| DB
+        Logic -->|Notify| Webhook[Slack / Discord]
+    end
+    
+    UI[Next.js Dashboard] -->|Read| DB
+```
+
+## 🔌 API Endpoints
+
+### Ingestion
+*   `POST /api/v1/logs/ingest`
+    *   Accepts JSON log events with `level`, `message`, `service_id`, `environment_id`.
+
+### Operations (Protected)
+These endpoints drive the background logic. They are protected by strict header authentication.
+*   `POST /api/internal/cron/notifications` (Process alerts)
+*   `POST /api/internal/cron/evaluate` (Check rules)
+*   `POST /api/internal/cron/cleanup` (Delete old logs)
+
+## ⏱️ Scheduling
+To operate effectively on the **Vercel Hobby Plan** (which limits Cron Jobs to 1/day), we use a hybrid model:
+
+1.  **Frequent Jobs (10m)**: Triggered by a free external service (like [cron-job.org](https://cron-job.org)) hitting the internal proxy endpoints.
+2.  **Daily Jobs**: Handled natively by `vercel.json` for data cleanup.
+
+## 🔐 Security
+*   **Header Auth**: Internal routes require `x-internal-cron-secret`.
+*   **No Query Secrets**: Credentials are never passed in URLs.
+*   **Method Locking**: Sensitive endpoints reject non-POST requests.
+*   **Environment**: All secrets managed via `.env`.
+
+## Project Status
+**Active / Stable**.
+This project demonstrates how to build a production-grade observability tool using cost-effective "scale-to-zero" infrastructure. It is designed to be free-tier friendly while supporting multi-tenant scale.
+
+**Known Limitations**:
+*   Vercel Hobby functions have execution timeouts (10s default), so data processing is batched.
+*   Relies on an external pinger for < 24h cron schedules.
+
+## 🚀 Quickstart
 
 ```bash
 # 1. Clone
@@ -62,67 +123,25 @@ cd pulseops-lite
 # 2. Install
 pnpm install
 
-# 3. Setup Env
-# Copy example and fill in POSTGRES_URL, INTERNAL_CRON_SECRET, etc.
+# 3. Setup Environment
+# Create .env.local and add your Vercel Postgres credentials + Cron Secret
 cp .env.example .env.local
 
-# 4. Run
+# 4. Migrate Database
+pnpm db:migrate
+
+# 5. Run Locally
 pnpm dev
 ```
 
-## Architecture
-PulseOps Lite uses a serverless architecture optimized for Vercel.
-*   **Ingest**: `POST /api/v1/logs` writes directly to Postgres.
-*   **Processing**: Scheduled jobs (`evaluator`, `notifier`) run periodically to checking for alert conditions.
-*   **UI**: Reactive dashboard built with Next.js Server Components.
-
-## API Endpoints
-
-### Ingestion
-*   `POST /api/v1/logs`: Ingest application logs.
-
-### Internal Cron Proxies (Protected)
-These endpoints are designed to be triggered by an external scheduler (e.g., cron-job.org).
-*   `POST /api/internal/cron/notifications`
-*   `POST /api/internal/cron/evaluate`
-*   `POST /api/internal/cron/cleanup`
-
-**Authentication**:
-Requires custom header:
-`x-internal-cron-secret: <INTERNAL_CRON_SECRET>`
-
-## Scheduling
-To bypass Vercel Hobby's "daily limit", we use a hybrid approach:
-
-1.  **Daily Jobs**: Handled by **Vercel Cron** (`vercel.json`) for cleanup tasks.
-2.  **Frequent Jobs (Every 10m)**: Handled by **External Cron** (cron-job.org) hitting the proxy endpoints.
-
-See [EXTERNAL_CRON_SETUP.md](./EXTERNAL_CRON_SETUP.md) for configuration details.
-
-## Security
-*   **No Query Secrets**: Secrets are never passed in the URL.
-*   **Header Auth**: Strict enforcement of `x-internal-cron-secret` header.
-*   **POST Only**: Cron endpoints reject all other methods.
-*   **Environment Variables**: All secrets stored in `.env`.
-
-See [SECURITY_WARNING.md](./SECURITY_WARNING.md) for policy details.
-
-## Diagnostics
-Admins can view system health at `/diagnostics`.
-*   Shows last run status for all cron jobs.
-*   Lists execution history and errors.
-
 ## Deployment
 1.  Push to GitHub.
-2.  Connect to Vercel.
-3.  Add Environment Variables.
-4.  Configure External Cron (for 10m jobs).
-
-## Troubleshooting
-*   **Cron 401/405**: Check `x-internal-cron-secret` header and ensure method is `POST`.
-*   **Vercel Deployment Error**: Ensure you didn't add frequent schedules to `vercel.json` (max 1/day).
+2.  Import to Vercel.
+3.  Connect Vercel Postgres storage.
+4.  Configure Environment Variables (`INTERNAL_CRON_SECRET`, `JWT_SECRET`, etc.).
+5.  Set up [External Cron](./EXTERNAL_CRON_SETUP.md) for the 10-minute jobs.
 
 ## Related Documentation
-*   [EXTERNAL_CRON_SETUP.md](./EXTERNAL_CRON_SETUP.md)
-*   [SECURITY_WARNING.md](./SECURITY_WARNING.md)
-*   [VERCEL_LIMITS.md](./VERCEL_LIMITS.md)
+*   [EXTERNAL_CRON_SETUP.md](./EXTERNAL_CRON_SETUP.md) - How to configure the 10m triggers.
+*   [SECURITY_WARNING.md](./SECURITY_WARNING.md) - Secrets management policy.
+*   [VERCEL_LIMITS.md](./VERCEL_LIMITS.md) - Analysis of Hobby tier constraints.
