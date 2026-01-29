@@ -16,7 +16,10 @@ export async function validateCronRequest(req: NextRequest): Promise<NextRespons
     }
 
     const CRON_SECRET = process.env.CRON_SECRET;
-    const INTERNAL_SECRET = process.env.INTERNAL_CRON_SECRET || 'super-secret-cron-key';
+    const INTERNAL_SECRET = process.env.INTERNAL_CRON_SECRET;
+    if (!INTERNAL_SECRET) {
+        console.warn('INTERNAL_CRON_SECRET is not set');
+    }
 
     // 2. Check Vercel Native Cron Secret (Authorization Header)
     const authHeader = req.headers.get('authorization');
@@ -24,11 +27,14 @@ export async function validateCronRequest(req: NextRequest): Promise<NextRespons
         return null; // Authorized
     }
 
-    // 3. Check Query Parameter (cron_secret) with Timing Safe Compare
     const url = new URL(req.url);
     const querySecret = url.searchParams.get('cron_secret');
 
     if (querySecret) {
+        if (!INTERNAL_SECRET) {
+            console.error('INTERNAL_CRON_SECRET is not configured on server');
+            return NextResponse.json({ error: 'Server Configuration Error', message: 'Cron secret not configured' }, { status: 500 });
+        }
         const expected = Buffer.from(INTERNAL_SECRET);
         const actual = Buffer.from(querySecret);
 

@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
     const headers = withCorrelationId(correlationId, { 'Content-Type': 'application/json' });
 
     // 1. Security Check (Legacy Header)
-    const INTERNAL_SECRET = process.env.INTERNAL_CRON_SECRET || 'super-secret-cron-key';
+    const INTERNAL_SECRET = process.env.INTERNAL_CRON_SECRET;
     const secret = request.headers.get('x-internal-cron-secret');
     if (secret !== INTERNAL_SECRET) {
         return NextResponse.json(

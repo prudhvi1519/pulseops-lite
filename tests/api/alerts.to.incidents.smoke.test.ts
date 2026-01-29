@@ -15,7 +15,7 @@ describe.skipIf(skip)('Alerts to Incidents Logic', () => {
     let serviceId: string;
     let envId: string;
     let ruleId: string;
-    const SECRET = process.env.INTERNAL_CRON_SECRET || 'super-secret-cron-key';
+    const SECRET = process.env.INTERNAL_CRON_SECRET || 'test-secret';
 
     beforeAll(async () => {
         orgId = crypto.randomUUID();

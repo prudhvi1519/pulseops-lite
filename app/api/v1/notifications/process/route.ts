@@ -6,7 +6,7 @@ import { runNotificationsJob } from '@/lib/cron/jobs/notifications';
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
-    const INTERNAL_SECRET = process.env.INTERNAL_CRON_SECRET || 'super-secret-cron-key';
+    const INTERNAL_SECRET = process.env.INTERNAL_CRON_SECRET;
     const correlationId = getCorrelationId(request);
     const headers = withCorrelationId(correlationId, { 'Content-Type': 'application/json' });
 

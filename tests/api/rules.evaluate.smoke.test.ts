@@ -16,7 +16,7 @@ describe.skipIf(skip)('Rules Evaluator API', () => {
     let logRuleId: string;
     let depRuleId: string;
 
-    const SECRET = process.env.INTERNAL_CRON_SECRET || 'super-secret-cron-key';
+    const SECRET = process.env.INTERNAL_CRON_SECRET || 'test-secret';
 
     beforeAll(async () => {
         orgId = crypto.randomUUID();
