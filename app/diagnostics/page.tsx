@@ -14,7 +14,7 @@ interface CronRun {
     status: string;
     started_at: string;
     finished_at: string | null;
-    meta_json: any;
+    meta_json: unknown;
 }
 
 export default function DiagnosticsPage() {
@@ -52,7 +52,7 @@ export default function DiagnosticsPage() {
                 {error}
             </div>
             <div className="mt-4">
-                <LinkButton href="/dashboard" variant="outline">Back to Dashboard</LinkButton>
+                <LinkButton href="/dashboard" variant="ghost">Back to Dashboard</LinkButton>
             </div>
         </AppShell>
     );
@@ -69,7 +69,7 @@ export default function DiagnosticsPage() {
                             <Card key={job.name} padding="md" className="border-l-4 border-l-primary/50">
                                 <div className="flex justify-between items-start mb-2">
                                     <h3 className="font-semibold text-lg">{job.name}</h3>
-                                    <Badge variant={job.status === 'success' ? 'success' : 'destructive'}>
+                                    <Badge variant={job.status === 'success' ? 'success' : 'error'}>
                                         {job.status}
                                     </Badge>
                                 </div>
@@ -106,7 +106,7 @@ export default function DiagnosticsPage() {
                                         <tr key={run.id} className="hover:bg-muted/5">
                                             <td className="px-4 py-3 font-medium">{run.name}</td>
                                             <td className="px-4 py-3">
-                                                <Badge size="sm" variant={run.status === 'success' ? 'success' : 'destructive'}>
+                                                <Badge variant={run.status === 'success' ? 'success' : 'error'}>
                                                     {run.status}
                                                 </Badge>
                                             </td>
