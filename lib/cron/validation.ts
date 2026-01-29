@@ -1,33 +1,39 @@
 import { NextRequest, NextResponse } from 'next/server';
+import crypto from 'crypto';
 
 /**
  * Validates the request authentication for Cron Jobs.
+ * Request must be POST.
  * Supports:
  * 1. Vercel Cron (Authorization: Bearer <CRON_SECRET>)
- * 2. Manual/Legacy (x-internal-cron-secret header)
- * 3. Query Param (secret=<INTERNAL_CRON_SECRET>) - for Vercel Cron via proxy
+ * 2. Query Param (cron_secret=<INTERNAL_CRON_SECRET>)
  */
 export async function validateCronRequest(req: NextRequest): Promise<NextResponse | null> {
+    // 1. Enforce POST
+    if (req.method !== 'POST') {
+        return NextResponse.json({ error: 'Method Not Allowed', message: 'Only POST is allowed' }, { status: 405 });
+    }
+
     const CRON_SECRET = process.env.CRON_SECRET;
     const INTERNAL_SECRET = process.env.INTERNAL_CRON_SECRET || 'super-secret-cron-key';
 
-    // 1. Check Vercel Native Cron Secret (Authorization Header)
+    // 2. Check Vercel Native Cron Secret (Authorization Header)
     const authHeader = req.headers.get('authorization');
     if (CRON_SECRET && authHeader === `Bearer ${CRON_SECRET}`) {
         return null; // Authorized
     }
 
-    // 2. Check Legacy Header (x-internal-cron-secret)
-    const headerSecret = req.headers.get('x-internal-cron-secret');
-    if (headerSecret === INTERNAL_SECRET) {
-        return null; // Authorized
-    }
-
-    // 3. Check Query Parameter (secret)
+    // 3. Check Query Parameter (cron_secret) with Timing Safe Compare
     const url = new URL(req.url);
-    const querySecret = url.searchParams.get('secret');
-    if (querySecret === INTERNAL_SECRET) {
-        return null; // Authorized
+    const querySecret = url.searchParams.get('cron_secret');
+
+    if (querySecret) {
+        const expected = Buffer.from(INTERNAL_SECRET);
+        const actual = Buffer.from(querySecret);
+
+        if (expected.length === actual.length && crypto.timingSafeEqual(expected, actual)) {
+            return null; // Authorized
+        }
     }
 
     // Unauthorized
