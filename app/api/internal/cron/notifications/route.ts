@@ -4,6 +4,10 @@ import { runNotificationsJob } from '@/lib/cron/jobs/notifications';
 
 export const dynamic = 'force-dynamic';
 
+export async function GET(req: NextRequest) {
+    return POST(req);
+}
+
 export async function POST(req: NextRequest) {
     const error = await validateCronRequest(req);
     if (error) return error;

@@ -9,9 +9,10 @@ import crypto from 'crypto';
  * 2. Query Param (cron_secret=<INTERNAL_CRON_SECRET>)
  */
 export async function validateCronRequest(req: NextRequest): Promise<NextResponse | null> {
-    // 1. Enforce POST
-    if (req.method !== 'POST') {
-        return NextResponse.json({ error: 'Method Not Allowed', message: 'Only POST is allowed' }, { status: 405 });
+    // 1. Check Method (Allow GET for Vercel Cron, POST for manual)
+    // Vercel Cron sends GET requests. We must allow GET.
+    if (req.method !== 'POST' && req.method !== 'GET') {
+        return NextResponse.json({ error: 'Method Not Allowed', message: 'Only POST and GET are allowed' }, { status: 405 });
     }
 
     const CRON_SECRET = process.env.CRON_SECRET;
