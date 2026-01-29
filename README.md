@@ -1,5 +1,9 @@
 # PulseOps Lite
 
+[![CI](https://github.com/prudhvi1519/pulseops-lite/actions/workflows/ci.yml/badge.svg)](https://github.com/prudhvi1519/pulseops-lite/actions/workflows/ci.yml)
+[![Demo](https://img.shields.io/badge/demo-live-success)](https://pulseops-lite.vercel.app)
+[![Repo](https://img.shields.io/badge/repo-github-gray)](https://github.com/prudhvi1519/pulseops-lite)
+
 **PulseOps Lite** is a lightweight, multi-tenant observability and incident management platform built for modern engineering teams. It provides log ingestion, automated alert rules, and incident tracking in a clean, developer-centric UI.
 
 **Live Demo**: [https://pulseops-lite.vercel.app](https://pulseops-lite.vercel.app)
@@ -8,13 +12,14 @@
 
 ## Table of Contents
 *   [Overview](#overview)
+*   [Screenshots](#screenshots)
 *   [Features](#features)
 *   [Tech Stack](#tech-stack)
+*   [Quickstart](#quickstart)
 *   [Architecture](#architecture)
 *   [API Endpoints](#api-endpoints)
 *   [Scheduling](#scheduling)
 *   [Security](#security)
-*   [Local Development](#local-development)
 *   [Diagnostics](#diagnostics)
 *   [Deployment](#deployment)
 *   [Troubleshooting](#troubleshooting)
@@ -24,6 +29,10 @@
 
 ## Overview
 PulseOps Lite solves the "observability gap" for small teams who need robust logging and alerting without the enterprise price tag of Datadog or Splunk. It runs entirely on free-tier infrastructure (Vercel Hobby + Neon/Supabase).
+
+## Screenshots
+![Dashboard](./docs/screens/prod/desktop/04_dashboard.png)
+*Real-time dashboard showing logs and recent incidents.*
 
 ## Features
 *   **Multi-Tenant**: Support for multiple organizations with role-based access.
@@ -40,6 +49,26 @@ PulseOps Lite solves the "observability gap" for small teams who need robust log
 *   **Styling**: Tailwind CSS
 *   **Deployment**: Vercel
 *   **Cron**: Hybrid (Vercel Native + External)
+
+## Quickstart
+
+Get running in minutes locally:
+
+```bash
+# 1. Clone
+git clone https://github.com/prudhvi1519/pulseops-lite.git
+cd pulseops-lite
+
+# 2. Install
+pnpm install
+
+# 3. Setup Env
+# Copy example and fill in POSTGRES_URL, INTERNAL_CRON_SECRET, etc.
+cp .env.example .env.local
+
+# 4. Run
+pnpm dev
+```
 
 ## Architecture
 PulseOps Lite uses a serverless architecture optimized for Vercel.
@@ -77,25 +106,6 @@ See [EXTERNAL_CRON_SETUP.md](./EXTERNAL_CRON_SETUP.md) for configuration details
 *   **Environment Variables**: All secrets stored in `.env`.
 
 See [SECURITY_WARNING.md](./SECURITY_WARNING.md) for policy details.
-
-## Local Development
-1.  **Clone**
-    ```bash
-    git clone https://github.com/prudhvi1519/pulseops-lite.git
-    cd pulseops-lite
-    pnpm install
-    ```
-2.  **Env Setup**
-    Copy `.env.example` to `.env.local`:
-    ```bash
-    POSTGRES_URL="..."
-    INTERNAL_CRON_SECRET="..."
-    JWT_SECRET="..."
-    ```
-3.  **Run**
-    ```bash
-    pnpm dev
-    ```
 
 ## Diagnostics
 Admins can view system health at `/diagnostics`.
